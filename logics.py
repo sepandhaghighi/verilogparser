@@ -48,6 +48,7 @@ def functionExtractor(splitData):
             output_dict[output_item] = bufFunc(input_vector[0])
         elif splited_item[0].upper() == "NOT":
             output_dict[output_item] = notFunc(input_vector[0])
+    print(output_dict)
 
 
 
@@ -141,13 +142,14 @@ def norFunc(inputVector):
         return 0
     else :
         return 1
-def getVerilog(filename,input_data):
+def getVerilog(filename):
     try:
         global output_dict
         global input_dict
         file=open(filename,"r")
         data=file.read()
         splitData = data.strip().split(";")
+        input_data=[0,"z"]
         (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
         input_dict={}
         if len(input_data)==len(inputArray):
@@ -157,7 +159,6 @@ def getVerilog(filename,input_data):
         outputs.extend(outputArray)
         output_dict=dict(zip(outputs,len(outputs)*[0]))
         functionExtractor(splitData)
-        print(input_dict,output_dict)
 
 
 
@@ -166,17 +167,6 @@ def getVerilog(filename,input_data):
 
 
 
-def test_maker(length):
-    temp=""
-    result=[]
-    for number in range(2**length):
-        temp=str(bin(number))[2:]
-        temp=(length-len(temp))*"0"+temp
-        result.append(list(map(int,list(temp))))
-    return result
-
 
 if __name__=="__main__":
-    test_benchmark=test_maker(2)
-    for i in test_benchmark:
-        getVerilog("test.v",i)
+    getVerilog("test.v")
