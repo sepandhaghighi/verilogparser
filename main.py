@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from operator import xor
+import itertools
 output_dict={}
 input_dict={}
 
@@ -167,13 +168,13 @@ def getVerilog(filename,input_data):
 
 
 def test_maker(length):
-    temp=""
-    result=[]
-    for number in range(2**length):
-        temp=str(bin(number))[2:]
-        temp=(length-len(temp))*"0"+temp
-        result.append(list(map(int,list(temp))))
-    return result
+    '''
+    This function create all of possible case for logic test
+    :param length: length of bit array
+    :type length: int
+    :return: all of possible cases as list
+    '''
+    return itertools.combinations_with_replacement([1,0,"z","x"],length)
 
 
 if __name__=="__main__":
