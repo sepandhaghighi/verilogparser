@@ -4,6 +4,20 @@ from .logics import *
 import itertools
 output_dict={}
 input_dict={}
+from art import *
+version="0.1"
+
+def help_func():
+    '''
+    Print Help Page
+    :return: None
+    '''
+    tprint("pyVerilog")
+    tprint("v"+version)
+    tprint("By S.Haghighi")
+    print("Help : \n")
+    print("     - file.v all --> (test all cases)\n")
+    print("     - file.v test vector --> (test case Example : python -m pyVerilog test.v 1,1,1")
 
 
 def zero_insert(input_string):
@@ -98,6 +112,16 @@ def functionExtractor(splitData):
         elif splited_item[0].upper() == "NOT":
             input_data = list(map(readData, input_vector))
             output_dict[output_item] = notFunc(input_data[0])
+def print_result(file):
+    print("INPUT VECTOR : \n")
+    print(input_dict)
+    file.write("INPUT VECTOR : \n" + str(input_dict) + "\n\n")
+    print("NODES : \n")
+    print(output_dict)
+    file.write("NODES : \n" + str(output_dict) + "\n\n")
+    file.write(line() + "\n")
+    print(line())
+
 
 def getVerilog(filename,input_data=None,alltest=False):
     try:
@@ -124,14 +148,7 @@ def getVerilog(filename,input_data=None,alltest=False):
             outputs.extend(outputArray)
             output_dict=dict(zip(outputs,len(outputs)*[0]))
             functionExtractor(splitData)
-            print("INPUT VECTOR : \n")
-            print(input_dict)
-            output_file.write("INPUT VECTOR : \n"+str(input_dict)+"\n")
-            print("NODES : \n")
-            print(output_dict)
-            output_file.write("NODES : \n"+str(output_dict)+"\n")
-            output_file.write(line()+"\n")
-            print(line())
+            print_result(output_file)
         output_file.close()
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
