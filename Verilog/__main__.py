@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .pyVerilog import *
+from .Verilog import *
 import sys
 import time
 if __name__=="__main__":
