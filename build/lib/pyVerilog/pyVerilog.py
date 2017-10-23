@@ -37,7 +37,7 @@ def time_convert(input_string):
 
 
 def line(char="*",number=30):
-    print(char*number)
+    return (char*number)
 
 def moduleExtractor(splitData):
 
@@ -109,6 +109,7 @@ def getVerilog(filename,input_data=None,alltest=False):
         (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
         input_dict={}
         test_table=[]
+        output_file=open(filename.split(".")[0]+".log","w")
         if alltest==True:
             test_table=test_maker(len(inputArray))
         else:
@@ -125,9 +126,13 @@ def getVerilog(filename,input_data=None,alltest=False):
             functionExtractor(splitData)
             print("INPUT VECTOR : \n")
             print(input_dict)
+            output_file.write("INPUT VECTOR : \n"+str(input_dict)+"\n")
             print("NODES : \n")
             print(output_dict)
-            line()
+            output_file.write("NODES : \n"+str(output_dict)+"\n")
+            output_file.write(line()+"\n")
+            print(line())
+        output_file.close()
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
     except Exception as e:
