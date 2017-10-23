@@ -5,6 +5,6 @@ input N1,N2;
 output N3;
 
 
-xor NAND2_1 (N3,N1,N2);
+and NAND2_1 (N3,N1,N2);
 
 endmodule

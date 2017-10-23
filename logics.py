@@ -1,78 +1,33 @@
 # -*- coding: utf-8 -*-
-import re
 from operator import xor
-output_dict={}
-input_dict={}
-
-def moduleExtractor(splitData):
-
-    moduleSection=[]
-    inputSection=[]
-    wireSection=[]
-    outputSection=[]
-    for item in splitData:
-        if (item.find("module")!=-1) and (item.find("endmodule")==-1):
-            index_1 = item.find("(")
-            index_2 = item.find(")")
-            moduleSection=list(map(str.strip,item[index_1+1:index_2].replace("\n","").split(",")))
-        if item.find("input")!=-1:
-            inputSection=list(map(str.strip,item[8:].replace("\n","").split(",")))
-        if item.find('wire')!=-1:
-            wireSection = list(map(str.strip, item[7:].replace("\n", "").split(",")))
-        if item.find('output')!=-1:
-            outputSection = list(map(str.strip, item[9:].replace("\n", "").split(",")))
-
-
-    return (moduleSection,inputSection,wireSection,outputSection)
-
-def functionExtractor(splitData):
-    for item in splitData:
-        output_item=""
-        input_vector=[]
-        splited_item=item.strip().replace("\n","").split(" ")
-        input_vector = list(map(str.strip,("").join(splited_item[2:])[1:-1].split(",")))
-        output_item=input_vector.pop(0)
-        if splited_item[0].upper()=="AND":
-            output_dict[output_item]=andFunc(input_vector)
-        elif splited_item[0].upper()=="OR":
-            output_dict[output_item] = orFunc(input_vector)
-        elif splited_item[0].upper()=="NAND":
-            output_dict[output_item]=nandFunc(input_vector)
-        elif splited_item[0].upper()=="NOR":
-            output_dict[output_item] = norFunc(input_vector)
-        elif splited_item[0].upper() == "XOR":
-            output_dict[output_item] = xorFunc(input_vector)
-        elif splited_item[0].upper() == "XNOR":
-            output_dict[output_item] = xnorFunc(input_vector)
-        elif splited_item[0].upper() == "BUF":
-            output_dict[output_item] = bufFunc(input_vector[0])
-        elif splited_item[0].upper() == "NOT":
-            output_dict[output_item] = notFunc(input_vector[0])
-    print(output_dict)
 
 
 
 
 
 def andFunc(inputVector):
+    '''
+    And Function
+    :param inputVector: input vector
+    :type inputVector:list
+    :return: ["x",0,1]
+    '''
     output=1
-    tempLogic=1
-    for i in inputVector:
-        if i in output_dict.keys():
-            tempLogic=output_dict[i]
-        else:
-            tempLogic=input_dict[i]
-        if (tempLogic=="z" or tempLogic=="x") and output!=0:
-            output="x"
-            break
-        elif tempLogic==0:
-            output=0
-            break
-        else:
-            output=output and tempLogic
+    if 0 in inputVector:
+        output=0
+    elif ("z" in inputVector) or ("x" in inputVector):
+        output="x"
+    else:
+        output=1
     return output
-def nandFunc(inputLogic):
-    output=andFunc(inputLogic)
+def nandFunc(inpuVector):
+    '''
+    Nand Function
+    :param inputVector: input vector
+    :type inpuVector : list
+    :return: ["x",0,1]
+    '''
+    output=andFunc(inputVector)
     if output==1:
         return 0
     elif output==0:
@@ -80,12 +35,24 @@ def nandFunc(inputLogic):
     else:
         return "x"
 def bufFunc(inputLogic):
+    '''
+    Buf Function
+    :param inputLogic: 0,"z","x",1
+    :type inpuVector : str,int
+    :return: ["x",0,1]
+    '''
     temp=inputLogic
     if temp=="z" or temp=="x":
         return "x"
     else:
         return temp
 def notFunc(inputLogic):
+    '''
+    Not Function
+    :param inputLogic: 0,"z","x",1
+    :type inpuVector : str,int
+    :return: ["x",0,1]
+    '''
     temp=inputLogic
     if temp=="z" or temp=="x":
         return "x"
@@ -94,21 +61,28 @@ def notFunc(inputLogic):
     else:
         return 1
 def xorFunc(inputVector):
+    '''
+    Xor Function
+    :param inputVector: input vector
+    :type inpuVector : list
+    :return: ["x",0,1]
+    '''
     output=0
-    tempLogic=0
     for i in inputVector:
-        if i in output_dict.keys():
-            tempLogic=output_dict[i]
-        else:
-            tempLogic=input_dict[i]
-        if tempLogic=="z" or tempLogic=="x":
+        if i=="z" or i=="x":
             output="x"
             break
         else:
-            output=xor(output,tempLogic)
+            output=xor(output,i)
     return output
 
 def xnorFunc(inputVector):
+    '''
+    Xnor Function
+    :param inputVector: input vector
+    :type inpuVector : list
+    :return: ["x",0,1]
+    '''
     output=xorFunc(inputVector)
     if output=="x":
         return output
@@ -118,23 +92,27 @@ def xnorFunc(inputVector):
         return 1
 
 def orFunc(inputVector):
+    '''
+    Or Function
+    :param inputVector: input vector
+    :type inpuVector : list
+    :return: ["x",0,1]
+    '''
     output=0
-    tempLogic=0
-    for i in inputVector:
-        if i in output_dict.keys():
-            tempLogic=output_dict[i]
-        else:
-            tempLogic=input_dict[i]
-        if (tempLogic=="z" or tempLogic=="x") and output!=1:
-            output="x"
-            break
-        elif tempLogic==1:
-            output=1
-            break
-        else:
-            output=output or tempLogic
+    if 1 in inputVector:
+        output=1
+    elif ("z" in inputVector) or ("x" in inputVector):
+        output="x"
+    else:
+        output=0
     return output
 def norFunc(inputVector):
+    '''
+    Nor Function
+    :param inputVector: input vector
+    :type inpuVector : list
+    :return: ["x",0,1]
+    '''
     output=orFunc(inputVector)
     if output=="x":
         return output
@@ -142,31 +120,3 @@ def norFunc(inputVector):
         return 0
     else :
         return 1
-def getVerilog(filename):
-    try:
-        global output_dict
-        global input_dict
-        file=open(filename,"r")
-        data=file.read()
-        splitData = data.strip().split(";")
-        input_data=[0,"z"]
-        (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
-        input_dict={}
-        if len(input_data)==len(inputArray):
-            input_dict=dict(zip(inputArray,input_data))
-        outputs=[]
-        outputs.extend(wireArray)
-        outputs.extend(outputArray)
-        output_dict=dict(zip(outputs,len(outputs)*[0]))
-        functionExtractor(splitData)
-
-
-
-    except FileNotFoundError:
-        print("Verilog File Not Found")
-
-
-
-
-if __name__=="__main__":
-    getVerilog("test.v")
