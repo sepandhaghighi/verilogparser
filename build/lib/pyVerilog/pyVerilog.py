@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
-from logics import *
+from .logics import *
 import itertools
 output_dict={}
 input_dict={}
+
+def line(char="*",number=30):
+    print(char*number)
 
 def moduleExtractor(splitData):
 
@@ -74,22 +77,30 @@ def getVerilog(filename,input_data=None,alltest=False):
         splitData = data.strip().split(";")
         (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
         input_dict={}
+        test_table=[]
         if alltest==True:
             test_table=test_maker(len(inputArray))
-            for case in test_table:
-                if len(case)==len(inputArray):
-                    input_dict=dict(zip(inputArray,case))
-                outputs=[]
-                outputs.extend(wireArray)
-                outputs.extend(outputArray)
-                output_dict=dict(zip(outputs,len(outputs)*[0]))
-                functionExtractor(splitData)
-                print(input_dict,output_dict)
-
-
-
+        else:
+            test_table.append(input_data)
+        for case in test_table:
+            if len(case)==len(inputArray):
+                input_dict=dict(zip(inputArray,case))
+            else:
+                raise Exception("[Error] Bad Input Vector")
+            outputs=[]
+            outputs.extend(wireArray)
+            outputs.extend(outputArray)
+            output_dict=dict(zip(outputs,len(outputs)*[0]))
+            functionExtractor(splitData)
+            print("INPUT VECTOR : ")
+            print(input_dict)
+            print("NODES : ")
+            print(output_dict)
+            line()
     except FileNotFoundError:
-        print("Verilog File Not Found")
+        print("[Error] Verilog File Not Found")
+    except Exception as e:
+        print(str(e))
 
 
 
@@ -104,4 +115,4 @@ def test_maker(length):
 
 
 if __name__=="__main__":
-    getVerilog("test.v",alltest=True)
+    getVerilog("test.v",input_data=[1,1],alltest=False)
