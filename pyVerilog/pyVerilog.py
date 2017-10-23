@@ -65,11 +65,14 @@ def moduleExtractor(splitData):
             index_2 = item.find(")")
             moduleSection=list(map(str.strip,item[index_1+1:index_2].replace("\n","").split(",")))
         if item.find("input")!=-1:
-            inputSection=list(map(str.strip,item[8:].replace("\n","").split(",")))
+            index_1 = item.find(" ")
+            inputSection=list(map(str.strip,item[index_1+1:].replace("\n","").split(",")))
         if item.find('wire')!=-1:
-            wireSection = list(map(str.strip, item[7:].replace("\n", "").split(",")))
+            index_1 = item.find(" ")
+            wireSection = list(map(str.strip, item[index_1+1:].replace("\n", "").split(",")))
         if item.find('output')!=-1:
-            outputSection = list(map(str.strip, item[9:].replace("\n", "").split(",")))
+            index_1 = item.find(" ")
+            outputSection = list(map(str.strip, item[index_1+1:].replace("\n", "").split(",")))
 
 
     return (moduleSection,inputSection,wireSection,outputSection)
@@ -85,8 +88,10 @@ def functionExtractor(splitData):
     for item in splitData:
         output_item=""
         input_vector=[]
+        index_1=item.find("(")
+        index_2=item.find(")")
         splited_item=item.strip().replace("\n","").split(" ")
-        input_vector = list(map(str.strip,("").join(splited_item[2:])[1:-1].split(",")))
+        input_vector = list(map(str.strip,item[index_1+1:index_2].replace("\n","").split(",")))
         output_item=input_vector.pop(0)
         if splited_item[0].upper()=="AND":
             input_data = list(map(readData, input_vector))
@@ -113,12 +118,14 @@ def functionExtractor(splitData):
             input_data = list(map(readData, input_vector))
             output_dict[output_item] = notFunc(input_data[0])
 def print_result(file):
+    sorted_out_vector=sorted(output_dict.items())
+    sorted_in_vector=sorted(input_dict.items())
     print("INPUT VECTOR : \n")
-    print(input_dict)
-    file.write("INPUT VECTOR : \n" + str(input_dict) + "\n\n")
+    print(sorted_in_vector)
+    file.write("INPUT VECTOR : \n" + str(sorted_in_vector) + "\n\n")
     print("NODES : \n")
-    print(output_dict)
-    file.write("NODES : \n" + str(output_dict) + "\n\n")
+    print(sorted_out_vector)
+    file.write("NODES : \n" + str(sorted_out_vector) + "\n\n")
     file.write(line() + "\n")
     print(line())
 
@@ -152,8 +159,6 @@ def getVerilog(filename,input_data=None,alltest=False):
         output_file.close()
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
-    except Exception as e:
-        print(str(e))
 
 
 
@@ -164,7 +169,7 @@ def test_maker(length):
     :type length: int
     :return: all of possible cases as list
     '''
-    return itertools.product([1,0,"z","x"], repeat=length)
+    return itertools.product([1,0], repeat=length)
 
 
 if __name__=="__main__":
