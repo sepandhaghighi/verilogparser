@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 from operator import xor
-
-
-
-
-
 def andFunc(inputVector):
     '''
     And Function

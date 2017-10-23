@@ -8,6 +8,6 @@ if __name__=="__main__":
         if args[2].upper()=="ALL":
             getVerilog(args[1],alltest=True)
         else:
-            getVerilog(args[1],input_data=list(args[2]),alltest=False)
+            getVerilog(args[1],input_data=args[2].split(","),alltest=False)
     else:
         print("Bad pyVerilog Call")

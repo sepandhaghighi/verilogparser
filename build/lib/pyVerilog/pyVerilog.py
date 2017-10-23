@@ -92,9 +92,9 @@ def getVerilog(filename,input_data=None,alltest=False):
             outputs.extend(outputArray)
             output_dict=dict(zip(outputs,len(outputs)*[0]))
             functionExtractor(splitData)
-            print("INPUT VECTOR : ")
+            print("INPUT VECTOR : \n")
             print(input_dict)
-            print("NODES : ")
+            print("NODES : \n")
             print(output_dict)
             line()
     except FileNotFoundError:
