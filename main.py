@@ -40,25 +40,32 @@ def functionExtractor(splitData):
         splited_item=item.strip().replace("\n","").split(" ")
         input_vector = list(map(str.strip,("").join(splited_item[2:])[1:-1].split(",")))
         output_item=input_vector.pop(0)
-        input_data=list(map(readData,input_vector))
         if splited_item[0].upper()=="AND":
+            input_data = list(map(readData, input_vector))
             output_dict[output_item]=andFunc(input_data)
         elif splited_item[0].upper()=="OR":
+            input_data = list(map(readData, input_vector))
             output_dict[output_item] = orFunc(input_data)
         elif splited_item[0].upper()=="NAND":
+            input_data = list(map(readData, input_vector))
             output_dict[output_item]=nandFunc(input_data)
         elif splited_item[0].upper()=="NOR":
+            input_data = list(map(readData, input_vector))
             output_dict[output_item] = norFunc(input_data)
         elif splited_item[0].upper() == "XOR":
+            input_data = list(map(readData, input_vector))
             output_dict[output_item] = xorFunc(input_data)
         elif splited_item[0].upper() == "XNOR":
+            input_data = list(map(readData, input_vector))
             output_dict[output_item] = xnorFunc(input_data)
         elif splited_item[0].upper() == "BUF":
+            input_data = list(map(readData, input_vector))
             output_dict[output_item] = bufFunc(input_data[0])
         elif splited_item[0].upper() == "NOT":
+            input_data = list(map(readData, input_vector))
             output_dict[output_item] = notFunc(input_data[0])
 
-def getVerilog(filename,input_data):
+def getVerilog(filename,input_data=None,alltest=False):
     try:
         global output_dict
         global input_dict
@@ -67,14 +74,17 @@ def getVerilog(filename,input_data):
         splitData = data.strip().split(";")
         (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
         input_dict={}
-        if len(input_data)==len(inputArray):
-            input_dict=dict(zip(inputArray,input_data))
-        outputs=[]
-        outputs.extend(wireArray)
-        outputs.extend(outputArray)
-        output_dict=dict(zip(outputs,len(outputs)*[0]))
-        functionExtractor(splitData)
-        print(input_dict,output_dict)
+        if alltest==True:
+            test_table=test_maker(len(inputArray))
+            for case in test_table:
+                if len(case)==len(inputArray):
+                    input_dict=dict(zip(inputArray,case))
+                outputs=[]
+                outputs.extend(wireArray)
+                outputs.extend(outputArray)
+                output_dict=dict(zip(outputs,len(outputs)*[0]))
+                functionExtractor(splitData)
+                print(input_dict,output_dict)
 
 
 
@@ -94,6 +104,4 @@ def test_maker(length):
 
 
 if __name__=="__main__":
-    test_benchmark=test_maker(2)
-    for i in test_benchmark:
-        getVerilog("test.v",i)
+    getVerilog("test.v",alltest=True)

@@ -20,7 +20,7 @@ def andFunc(inputVector):
     else:
         output=1
     return output
-def nandFunc(inpuVector):
+def nandFunc(inputVector):
     '''
     Nand Function
     :param inputVector: input vector
