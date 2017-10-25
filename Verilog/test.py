@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
->>> from Verilog import *
+>>> from verilog import *
 >>> import os
 >>> import itertools
 >>> path=os.path.join(os.getcwd(),"Samples","c17.v")
