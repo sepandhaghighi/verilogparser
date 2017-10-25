@@ -28,13 +28,13 @@ def help_func():
     Print Help Page
     :return: None
     '''
-    tprint("pyVerilog")
+    tprint("verilog")
     tprint("v"+version)
     tprint("S.Haghighi")
     print("Help : \n")
     print("     - file.v all --> (test all cases)\n")
-    print("     - file.v test vector --> (test case Example : python -m pyVerilog test.v 1,1,1")
-
+    print("     - file.v random test_number(optional) --> (test random cases)\n")
+    print("     - file.v test vector --> (test case Example : python -m verilog test.v 1,1,1")
 
 def zero_insert(input_string):
     '''
