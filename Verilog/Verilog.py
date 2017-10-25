@@ -34,7 +34,7 @@ def help_func():
     print("Help : \n")
     print("     - file.v all --> (test all cases)\n")
     print("     - file.v random test_number(optional) --> (test random cases)\n")
-    print("     - file.v test vector --> (test case Example : python -m verilog test.v 1,1,1")
+    print("     - file.v input test vector --> (test case Example : python -m verilog test.v input 1,1,1")
 
 def zero_insert(input_string):
     '''
@@ -127,14 +127,14 @@ def functionExtractor(splitData):
         elif splited_item[0].upper() == "NOT":
             func_array.append([notFunc, input_vector, output_item])
 def print_result(output_dict,input_dict,file):
-    sorted_out_vector=sorted(output_dict.items())
-    sorted_in_vector=sorted(input_dict.items())
+    sorted_out_vector=str(sorted(output_dict.items()))
+    sorted_in_vector=str(sorted(input_dict.items()))
     print("INPUT VECTOR : \n")
-    print(sorted_in_vector)
-    file.write("INPUT VECTOR : \n" + str(sorted_in_vector) + "\n\n")
+    print(sorted_in_vector+"\n")
+    file.write("INPUT VECTOR : \n" + sorted_in_vector + "\n")
     print("NODES : \n")
-    print(sorted_out_vector)
-    file.write("NODES : \n" + str(sorted_out_vector) + "\n\n")
+    print(sorted_out_vector+"\n")
+    file.write("NODES : \n" + sorted_out_vector + "\n")
     file.write(line() + "\n")
     print(line())
 
@@ -146,9 +146,11 @@ def get_result(output_dict,input_dict):
         output_dict[item[2]]=item[0](input_data)
     return  output_dict
 
-def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100):
+def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False):
     try:
         timer_1 = time.perf_counter()
+        if filename==None:
+            raise  Exception("[Error] Invalid Input File!!")
         file=open(filename,"r")
         data=file.read()
         splitData = data.strip().split(";")
@@ -158,7 +160,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         output_file=open(filename.split(".")[0]+".log","w")
         functionExtractor(splitData)
         if alltest==True:
-            test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number)
+            test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number,xz_flag=xz_flag)
         else:
             test_table.append(input_data)
         for case in test_table:
@@ -178,10 +180,12 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
         print("Simulation Faild!")
+    except Exception as e:
+        print(str(e))
 
 
 
-def test_maker(length,random_flag=False,test_number=100):
+def test_maker(length,random_flag=False,test_number=100,xz_flag=False):
     '''
     This function create all of possible case for logic test
     :param length: length of bit array
@@ -189,7 +193,10 @@ def test_maker(length,random_flag=False,test_number=100):
     :return: all of possible cases as list
     '''
     try:
-        table=list(itertools.product([1,0], repeat=length))
+        if xz_flag==False:
+            table=list(itertools.product([1,0], repeat=length))
+        else:
+            table = list(itertools.product([1, 0,"x","z"], repeat=length))
         if random_flag==False:
             return table
         else:

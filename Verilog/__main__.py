@@ -2,24 +2,49 @@
 from .verilog import *
 import sys
 import doctest
+def map_int(item):
+    if item=='1' or item=='0':
+        return int(item)
+    else:
+        return item
 if __name__=="__main__":
     args=sys.argv
-    filename=""
-    if len(args)>1:
-        if args[1].upper()=="HELP":
-            help_func()
-            sys.exit()
-        elif args[1].upper()=="TEST":
-            doctest.testfile("test.py",verbose=True)
-        if len(args)>2:
-            if args[2].upper()=="ALL":
-                verilog_parser(args[1],alltest=True)
-            elif args[2].upper()=="RANDOM":
-                if len(args)>3:
-                    verilog_parser(args[1], alltest=True, random_flag=True,test_number=int(args[3]))
-                else:
-                    verilog_parser(args[1],alltest=True,random_flag=True)
-            else:
-                verilog_parser(args[1],input_data=args[2].split(","),alltest=False)
-    else:
+    filename=None
+    input_data=None
+    for item in args:
+        if item.find(".v")!=-1:
+            filename=item
+    xz_flag=False
+    test_number=100
+    all_mode=False
+    random_mode=False
+    upper_args=list(map(str.upper,args))
+    if "INPUT" in upper_args:
+        index=upper_args.index("INPUT")
+        if len(upper_args)>index+1:
+            input_data=list(map(map_int,list(args[index+1].split(","))))
+    if "XZ" in upper_args:
+        xz_flag=True
+    if "RANDOM" in upper_args and (len(upper_args)>2):
+        random_mode=True
+        all_mode=True
+        index = upper_args.index("RANDOM")
+        try:
+            if len(upper_args)>index+1:
+                test_number=int(args[index+1])
+        except ValueError:
+            pass
+    if ("ALL" in upper_args) and (len(upper_args)>2):
+        all_mode=True
+    if "HELP" in upper_args:
         help_func()
+        sys.exit()
+
+    if all_mode==True:
+        verilog_parser(filename,alltest=True,random_flag=random_mode,xz_flag=xz_flag,test_number=test_number)
+    else:
+        verilog_parser(filename,input_data=input_data)
+
+
+
+
