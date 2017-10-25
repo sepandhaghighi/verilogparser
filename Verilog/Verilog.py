@@ -2,12 +2,26 @@
 import re
 from .logics import *
 import itertools
-output_dict={}
-input_dict={}
+from functools import partial
+import multiprocessing as mu
+from art import tprint
+import random
 func_array=[]
-from art import *
 version="0.1"
-
+def test_logics2():
+    test_table = itertools.product([1, 0, "x", "z"], repeat=2)
+    for item in test_table:
+        print("OR ",item," ",orFunc(item))
+        print("NOR ",item," ", norFunc(item))
+        print("XOR ",item," ", xorFunc(item))
+        print("XNOR ",item," ", xnorFunc(item))
+        print("AND ",item," ", andFunc(item))
+        print("NAND ",item," ", nandFunc(item))
+def test_logics1():
+    test_table = [1, 0, "x", "z"]
+    for item in test_table:
+        print("BUF ",item," ", bufFunc(item))
+        print("NOT ",item," ", notFunc(item))
 def help_func():
     '''
     Print Help Page
@@ -15,7 +29,7 @@ def help_func():
     '''
     tprint("pyVerilog")
     tprint("v"+version)
-    tprint("By S.Haghighi")
+    tprint("S.Haghighi")
     print("Help : \n")
     print("     - file.v all --> (test all cases)\n")
     print("     - file.v test vector --> (test case Example : python -m pyVerilog test.v 1,1,1")
@@ -78,7 +92,7 @@ def moduleExtractor(splitData):
 
     return (moduleSection,inputSection,wireSection,outputSection)
 
-def readData(inp):
+def readData(inp,output_dict,input_dict):
     if inp in output_dict.keys():
         tempLogic = output_dict[inp]
     else:
@@ -111,7 +125,7 @@ def functionExtractor(splitData):
             func_array.append([bufFunc, input_vector, output_item])
         elif splited_item[0].upper() == "NOT":
             func_array.append([notFunc, input_vector, output_item])
-def print_result(file):
+def print_result(output_dict,input_dict,file):
     sorted_out_vector=sorted(output_dict.items())
     sorted_in_vector=sorted(input_dict.items())
     print("INPUT VECTOR : \n")
@@ -123,16 +137,16 @@ def print_result(file):
     file.write(line() + "\n")
     print(line())
 
-def get_result():
-    global output_dict
+def get_result(output_dict,input_dict):
     global func_array
+    mapFunc=partial(readData,output_dict=output_dict,input_dict=input_dict)
     for item in func_array:
-        input_data = list(map(readData, item[1]))
+        input_data = list(map(mapFunc, item[1]))
         output_dict[item[2]]=item[0](input_data)
-def getVerilog(filename,input_data=None,alltest=False):
+    return  output_dict
+
+def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100):
     try:
-        global output_dict
-        global input_dict
         file=open(filename,"r")
         data=file.read()
         splitData = data.strip().split(";")
@@ -142,35 +156,35 @@ def getVerilog(filename,input_data=None,alltest=False):
         output_file=open(filename.split(".")[0]+".log","w")
         functionExtractor(splitData)
         if alltest==True:
-            test_table=test_maker(len(inputArray))
+            test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number)
         else:
             test_table.append(input_data)
         for case in test_table:
             if len(case)==len(inputArray):
                 input_dict=dict(zip(inputArray,case))
             else:
-                raise Exception("[Error] Bad Input Vector")
+                raise Exception("[Error] Bad Input Vector (This Logic Inputs : "+str(len(inputArray))+")")
             outputs=[]
             outputs.extend(wireArray)
             outputs.extend(outputArray)
             output_dict=dict(zip(outputs,len(outputs)*[0]))
-            get_result()
-            print_result(output_file)
+            result=get_result(output_dict,input_dict)
+            print_result(result,input_dict,output_file)
         output_file.close()
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
 
 
 
-def test_maker(length):
+def test_maker(length,random_flag=False,test_number=100):
     '''
     This function create all of possible case for logic test
     :param length: length of bit array
     :type length: int
     :return: all of possible cases as list
     '''
-    return itertools.product([1,0], repeat=length)
-
-
-if __name__=="__main__":
-    getVerilog("test.v",input_data=[1,1],alltest=False)
+    table=list(itertools.product([1,0], repeat=length))
+    if random_flag==False:
+        return table
+    else:
+        return random.sample(table,min(test_number,len(table)))
