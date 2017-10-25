@@ -6,6 +6,7 @@ from functools import partial
 import multiprocessing as mu
 from art import tprint
 import random
+import time
 func_array=[]
 version="0.1"
 def test_logics2():
@@ -147,6 +148,7 @@ def get_result(output_dict,input_dict):
 
 def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100):
     try:
+        timer_1 = time.perf_counter()
         file=open(filename,"r")
         data=file.read()
         splitData = data.strip().split(";")
@@ -171,8 +173,11 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             result=get_result(output_dict,input_dict)
             print_result(result,input_dict,output_file)
         output_file.close()
+        timer_2 = time.perf_counter()
+        print("Simulation Time : " + time_convert(str(timer_2 - timer_1)))
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
+        print("Simulation Faild!")
 
 
 
@@ -183,8 +188,12 @@ def test_maker(length,random_flag=False,test_number=100):
     :type length: int
     :return: all of possible cases as list
     '''
-    table=list(itertools.product([1,0], repeat=length))
-    if random_flag==False:
-        return table
-    else:
-        return random.sample(table,min(test_number,len(table)))
+    try:
+        table=list(itertools.product([1,0], repeat=length))
+        if random_flag==False:
+            return table
+        else:
+            return random.sample(table,min(test_number,len(table)))
+    except ValueError:
+        return random.sample(table,100)
+
