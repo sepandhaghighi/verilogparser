@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .Verilog import *
+from .verilog import *
 import sys
 import doctest
 if __name__=="__main__":
