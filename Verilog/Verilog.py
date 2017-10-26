@@ -49,21 +49,22 @@ def zero_insert(input_string):
         return "0"+input_string
     return input_string
 
-def time_convert(input_string):
+def time_convert(input_time):
     '''
     This function convert input_string from sec to DD,HH,MM,SS Format
     :param input_string: input time string  in sec
     :type input_string:str
     :return: converted time as string
     '''
-    input_sec=float(input_string)
+    input_sec=int(input_time)
+    input_ms=int((input_time-input_sec)*1000)
     input_minute=input_sec//60
     input_sec=int(input_sec-input_minute*60)
     input_hour=input_minute//60
     input_minute=int(input_minute-input_hour*60)
     input_day=int(input_hour//24)
     input_hour=int(input_hour-input_day*24)
-    return zero_insert(str(input_day))+" days, "+zero_insert(str(input_hour))+" hour, "+zero_insert(str(input_minute))+" minutes, "+zero_insert(str(input_sec))+" seconds"
+    return zero_insert(str(input_day))+" days, "+zero_insert(str(input_hour))+" hour, "+zero_insert(str(input_minute))+" minutes, "+zero_insert(str(input_sec))+" seconds "+zero_insert(str(input_ms))+" ms"
 
 
 def line(char="*",number=30):
@@ -176,7 +177,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             print_result(result,input_dict,output_file)
         output_file.close()
         timer_2 = time.perf_counter()
-        print("Simulation Time : " + time_convert(str(timer_2 - timer_1)))
+        print("Simulation Time : " + time_convert(timer_2 - timer_1))
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
         print("Simulation Faild!")
@@ -184,6 +185,18 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         print(str(e))
 
 
+def shuffeler(length,xz_flag,test_number):
+    basis=[1,0]
+    generator=[]
+    table_length=2**length
+    if xz_flag==True:
+        basis=[1, 0,"x","z"]
+        table_length=4**length
+    for i in range(length):
+        random.shuffle(basis)
+        generator.append(basis)
+    table=itertools.product(*generator)
+    return itertools.islice(table,min(test_number,table_length))
 
 def test_maker(length,random_flag=False,test_number=100,xz_flag=False):
     '''
@@ -193,14 +206,15 @@ def test_maker(length,random_flag=False,test_number=100,xz_flag=False):
     :return: all of possible cases as list
     '''
     try:
+
         if xz_flag==False:
-            table=list(itertools.product([1,0], repeat=length))
+            table=itertools.product([1,0], repeat=length)
         else:
-            table = list(itertools.product([1, 0,"x","z"], repeat=length))
+            table = itertools.product([1, 0,"x","z"], repeat=length)
         if random_flag==False:
             return table
         else:
-            return random.sample(table,min(test_number,len(table)))
+            return shuffeler(length,xz_flag,test_number)
     except ValueError:
-        return random.sample(table,100)
+        return shuffeler(length,xz_flag,test_number)
 
