@@ -39,6 +39,9 @@ if __name__=="__main__":
     if "HELP" in upper_args:
         help_func()
         sys.exit()
+    if "DETAIL" in upper_args:
+        module_detail(filename=filename)
+        sys.exit()
 
     if all_mode==True:
         verilog_parser(filename,alltest=True,random_flag=random_mode,xz_flag=xz_flag,test_number=test_number)

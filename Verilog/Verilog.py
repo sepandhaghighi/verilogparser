@@ -146,6 +146,26 @@ def get_result(output_dict,input_dict):
         input_data = list(map(mapFunc, item[1]))
         output_dict[item[2]]=item[0](input_data)
     return  output_dict
+def module_detail(filename):
+    try:
+        if filename==None:
+            raise  Exception("[Error] Invalid Input File!!")
+        file = open(filename, "r")
+        data = file.read()
+        splitData = data.strip().split(";")
+        (module, inputArray, wireArray, outputArray) = moduleExtractor(splitData)
+        tprint(filename)
+        print(line())
+        print("Input Size : "+str(len(inputArray)))
+        print(line())
+        print("Wire Size : " + str(len(wireArray)))
+        print(line())
+        print("Output Size : " + str(len(outputArray)))
+        print(line())
+    except FileNotFoundError:
+        print("[Error] Verilog File Not Found")
+    except Exception as e:
+        print(str(e))
 
 def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False):
     try:
@@ -163,6 +183,8 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         if alltest==True:
             test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number,xz_flag=xz_flag)
         else:
+            if input_data==None:
+                raise Exception("[Error] Bad Input Array!")
             test_table.append(input_data)
         for case in test_table:
             if len(case)==len(inputArray):
