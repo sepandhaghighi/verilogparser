@@ -36,7 +36,7 @@ def help_func():
     print("     - file.v all --> (test all cases)\n")
     print("     - file.v random test_number(optional) --> (test random cases)\n")
     print("     - file.v input test vector --> (test case Example : python -m verilog test.v input 1,1,1")
-
+    print("     - file.v detail --> (module details)")
 def zero_insert(input_string):
     '''
     This function get a string as input if input is one digit add a zero
