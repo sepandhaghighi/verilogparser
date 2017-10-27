@@ -8,6 +8,7 @@ from art import tprint
 import random
 import time
 func_array=[]
+import gc
 version="0.1"
 def test_logics2():
     test_table = itertools.product([1, 0, "x", "z"], repeat=2)
@@ -103,6 +104,8 @@ def readData(inp,output_dict,input_dict):
 
 def functionExtractor(splitData):
     global func_array
+    func_array=[]
+    gate_counter = [0, 0, 0, 0, 0, 0, 0, 0]
     for item in splitData:
         output_item=""
         input_vector=[]
@@ -112,21 +115,30 @@ def functionExtractor(splitData):
         input_vector = list(map(str.strip,item[index_1+1:index_2].replace("\n","").split(",")))
         output_item=input_vector.pop(0)
         if splited_item[0].upper()=="AND":
+            gate_counter[0]=gate_counter[0]+1
             func_array.append([andFunc,input_vector,output_item])
         elif splited_item[0].upper()=="OR":
+            gate_counter[1] = gate_counter[1] + 1
             func_array.append([orFunc, input_vector, output_item])
         elif splited_item[0].upper()=="NAND":
+            gate_counter[2] = gate_counter[2] + 1
             func_array.append([nandFunc, input_vector, output_item])
         elif splited_item[0].upper()=="NOR":
+            gate_counter[3] = gate_counter[3] + 1
             func_array.append([norFunc, input_vector, output_item])
         elif splited_item[0].upper() == "XOR":
+            gate_counter[4] = gate_counter[4] + 1
             func_array.append([xorFunc, input_vector, output_item])
         elif splited_item[0].upper() == "XNOR":
+            gate_counter[5] = gate_counter[5] + 1
             func_array.append([xnorFunc, input_vector, output_item])
         elif splited_item[0].upper() == "BUF":
+            gate_counter[6] = gate_counter[6] + 1
             func_array.append([bufFunc, input_vector, output_item])
         elif splited_item[0].upper() == "NOT":
+            gate_counter[7] = gate_counter[7] + 1
             func_array.append([notFunc, input_vector, output_item])
+    return gate_counter
 def print_result(output_dict,input_dict,file):
     sorted_out_vector=str(sorted(output_dict.items()))
     sorted_in_vector=str(sorted(input_dict.items()))
@@ -162,6 +174,13 @@ def module_detail(filename):
         print(line())
         print("Output Size : " + str(len(outputArray)))
         print(line())
+        gate_counter = functionExtractor(splitData)
+        gate_names=["AND","OR","NAND","NOR","XOR","XNOR","BUF","NOT"]
+        gate_dict=dict(zip(gate_names,gate_counter))
+        for gate in gate_names:
+            print(gate+" : "+str(gate_dict[gate]))
+            print(line())
+        gc.collect()
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
     except Exception as e:
@@ -179,7 +198,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         input_dict={}
         test_table=[]
         output_file=open(filename.split(".")[0]+".log","w")
-        functionExtractor(splitData)
+        gate_counter=functionExtractor(splitData)
         if alltest==True:
             test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number,xz_flag=xz_flag)
         else:
@@ -200,6 +219,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         output_file.close()
         timer_2 = time.perf_counter()
         print("Simulation Time : " + time_convert(timer_2 - timer_1))
+        gc.collect()
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
         print("Simulation Faild!")
