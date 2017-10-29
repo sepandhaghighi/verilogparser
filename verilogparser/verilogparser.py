@@ -10,7 +10,7 @@ import time
 func_array=[]
 import gc
 import os
-version="0.1"
+version="0.11"
 def test_logics2():
     test_table = itertools.product([1, 0, "x", "z"], repeat=2)
     for item in test_table:
@@ -30,9 +30,9 @@ def help_func():
     Print Help Page
     :return: None
     '''
-    tprint("verilog")
+    tprint("verilogparser")
     tprint("v"+version)
-    tprint("By S.Haghighi",font="cybermedium")
+    tprint("By S.Haghighi")
     print("Help : \n")
     print("     - file.v all --> (test all cases)\n")
     print("     - file.v random test_number(optional) --> (test random cases)\n")
