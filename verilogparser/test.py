@@ -201,7 +201,8 @@ Help :
 <BLANKLINE>
      - file.v random test_number(optional) --> (test random cases)
 <BLANKLINE>
-     - file.v input test vector --> (test case Example : python -m verilog test.v input 1,1,1
+     - file.v input test vector --> (test case Example : python -m verilog test.v input 1,1,1)
+<BLANKLINE>
      - file.v detail --> (module details)
 >>> cov.stop()
 >>> cov.save()

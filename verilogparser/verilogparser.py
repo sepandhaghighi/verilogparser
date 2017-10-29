@@ -36,7 +36,7 @@ def help_func():
     print("Help : \n")
     print("     - file.v all --> (test all cases)\n")
     print("     - file.v random test_number(optional) --> (test random cases)\n")
-    print("     - file.v input test vector --> (test case Example : python -m verilog test.v input 1,1,1")
+    print("     - file.v input test vector --> (test case Example : python -m verilog test.v input 1,1,1)\n")
     print("     - file.v detail --> (module details)")
 def zero_insert(input_string):
     '''
