@@ -120,25 +120,26 @@ NAND  ('z', 'z')   x
 Traceback (most recent call last):
         ...
 TypeError: object of type 'int' has no len()
->>> time_convert('33')
-'00 days, 00 hour, 00 minutes, 33 seconds'
->>> time_convert("15000")
-'00 days, 04 hour, 10 minutes, 00 seconds'
+>>> time_convert(33)
+'00 days, 00 hour, 00 minutes, 33 seconds 00 ms'
+>>> time_convert(15000)
+'00 days, 04 hour, 10 minutes, 00 seconds 00 ms'
 >>> time_convert("sadasdasd")
 Traceback (most recent call last):
         ...
-ValueError: could not convert string to float: 'sadasdasd'
+ValueError: invalid literal for int() with base 10: 'sadasdasd'
 >>> line()
 '******************************'
 >>> list(test_maker(2))
 [(1, 1), (1, 0), (0, 1), (0, 0)]
->>> verilog_parser(path,input_data=[1,1,1,1,1],alltest=False)
+>>> verilog_parser(path,input_data=[1,1,1,1,1],alltest=False,print_status=False)
 INPUT VECTOR :
 <BLANKLINE>
 [('N1', 1), ('N2', 1), ('N3', 1), ('N6', 1), ('N7', 1)]
 NODES :
 <BLANKLINE>
 [('N10', 0), ('N11', 0), ('N16', 1), ('N19', 1), ('N22', 1), ('N23', 0)]
+<BLANKLINE>
 ******************************
 
 '''

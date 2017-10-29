@@ -5,14 +5,17 @@
 // NtotalGates 6
 // NAND2 6
 
-module c17 (N1,N2,N3);
+module c17 (N1,N2,N3,N4,N5,N6,N7,N8,N9,N10,N11,N12,N13,N14,N15,N16,N17,N18,
+N19,N20);
 
-input N1,N2;
+input N1,N2,N3,N4,N5,N6,N7,N8,N9,N10,N11,N12,N13,N14,N15,N16,N17,N18,
+N19;
 
-output N3;
+output N20;
 
 
-or NAND2_1 (N3, N1, N2);
+or NAND2_1 (N4,N1,N2,N3,N20,N5,N6,N7,N8,N9,N10,N11,N12,N13,N14,N15,N16,N17,N18,
+N19);
 
 
 endmodule

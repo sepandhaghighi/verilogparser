@@ -19,6 +19,9 @@ if __name__=="__main__":
     all_mode=False
     random_mode=False
     upper_args=list(map(str.upper,args))
+    if "TEST" in upper_args:
+        doctest.testfile("test.py", optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS, verbose=True)
+        sys.exit()
     if "INPUT" in upper_args:
         index=upper_args.index("INPUT")
         if len(upper_args)>index+1:

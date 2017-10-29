@@ -186,7 +186,7 @@ def module_detail(filename):
     except Exception as e:
         print(str(e))
 
-def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False):
+def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False,print_status=True):
     try:
         timer_1 = time.perf_counter()
         if filename==None:
@@ -213,12 +213,13 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             outputs=[]
             outputs.extend(wireArray)
             outputs.extend(outputArray)
-            output_dict=dict(zip(outputs,len(outputs)*[0]))
+            output_dict=dict(zip(outputs,len(outputs)*["x"]))
             result=get_result(output_dict,input_dict)
             print_result(result,input_dict,output_file)
         output_file.close()
         timer_2 = time.perf_counter()
-        print("Simulation Time : " + time_convert(timer_2 - timer_1))
+        if print_status==True:
+            print("Simulation Time : " + time_convert(timer_2 - timer_1))
         gc.collect()
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
