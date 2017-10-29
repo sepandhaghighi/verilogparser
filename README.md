@@ -13,6 +13,7 @@ __   __  ___  _ __ (_)| |  ___    __ _  _ __    __ _  _ __  ___   ___  _ __
 <a href="https://codecov.io/gh/sepandhaghighi/verilogparser">
   <img src="https://codecov.io/gh/sepandhaghighi/verilogparser/branch/master/graph/badge.svg" alt="Codecov" />
 </a>
+<a href="https://badge.fury.io/py/verilogparser"><img src="https://badge.fury.io/py/verilogparser.svg" alt="PyPI version" height="18"></a>
 </div>
 	
 ----------
