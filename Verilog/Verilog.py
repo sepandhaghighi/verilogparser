@@ -9,6 +9,7 @@ import random
 import time
 func_array=[]
 import gc
+import os
 version="0.1"
 def test_logics2():
     test_table = itertools.product([1, 0, "x", "z"], repeat=2)
@@ -31,7 +32,7 @@ def help_func():
     '''
     tprint("verilog")
     tprint("v"+version)
-    tprint("S.Haghighi")
+    tprint("By S.Haghighi",font="cybermedium")
     print("Help : \n")
     print("     - file.v all --> (test all cases)\n")
     print("     - file.v random test_number(optional) --> (test random cases)\n")
@@ -166,7 +167,7 @@ def module_detail(filename):
         data = file.read()
         splitData = data.strip().split(";")
         (module, inputArray, wireArray, outputArray) = moduleExtractor(splitData)
-        tprint(filename)
+        tprint(os.path.basename(filename),font="slant")
         print(line())
         print("Input Size : "+str(len(inputArray)))
         print(line())
@@ -197,7 +198,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
         input_dict={}
         test_table=[]
-        output_file=open(filename.split(".")[0]+".log","w")
+        output_file=open(os.path.basename(filename).split(".")[0]+".log","w")
         gate_counter=functionExtractor(splitData)
         if alltest==True:
             test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number,xz_flag=xz_flag)
