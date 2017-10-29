@@ -10,6 +10,9 @@ __   __  ___  _ __ (_)| |  ___    __ _  _ __    __ _  _ __  ___   ___  _ __
 <a class="badge-align" href="https://www.codacy.com/app/sepand-haghighi/verilogparser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sepandhaghighi/verilogparser&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/52062ba9283845cb98a62f34ba92bdc6"/></a>
 <a href="https://travis-ci.org/sepandhaghighi/verilogparser"><img src="https://travis-ci.org/sepandhaghighi/verilogparser.svg?branch=master"></a>
 <a href="https://www.python.org/"><img src="https://img.shields.io/badge/built%20with-Python3-green.svg" alt="built with Python3" /></a>
+<a href="https://codecov.io/gh/sepandhaghighi/verilogparser">
+  <img src="https://codecov.io/gh/sepandhaghighi/verilogparser/branch/master/graph/badge.svg" alt="Codecov" />
+</a>
 </div>
 	
 ----------
