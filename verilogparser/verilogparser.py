@@ -10,7 +10,7 @@ import time
 func_array=[]
 import gc
 import os
-version="0.11"
+version="0.12"
 def test_logics2():
     test_table = itertools.product([1, 0, "x", "z"], repeat=2)
     for item in test_table:
