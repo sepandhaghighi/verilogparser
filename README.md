@@ -43,6 +43,7 @@ Simple verilog parser in python
 - Module Detail : `python -m verilogparser file.v detail`
 
 <div align="center">
+<a href="https://asciinema.org/a/144795" target="_blank"><img src="https://asciinema.org/a/144795.png" /></a>
 <p>Screen Record</p>
 </div>			
 
