@@ -84,15 +84,17 @@ def moduleExtractor(splitData):
             index_2 = item.find(")")
             moduleSection=list(map(str.strip,item[index_1+1:index_2].replace("\n","").split(",")))
         if item.find("input")!=-1:
-            index_1 = item.find(" ")
-            inputSection=list(map(str.strip,item[index_1+1:].replace("\n","").split(",")))
+            item_strip=item.strip()
+            index_1 = item_strip.find(" ")
+            inputSection=list(map(str.strip,item_strip[index_1+1:].replace("\n","").split(",")))
         if item.find('wire')!=-1:
-            index_1 = item.find(" ")
-            wireSection = list(map(str.strip, item[index_1+1:].replace("\n", "").split(",")))
+            item_strip = item.strip()
+            index_1 = item_strip.find(" ")
+            wireSection = list(map(str.strip, item_strip[index_1+1:].replace("\n", "").split(",")))
         if item.find('output')!=-1:
-            index_1 = item.find(" ")
-            outputSection = list(map(str.strip, item[index_1+1:].replace("\n", "").split(",")))
-
+            item_strip = item.strip()
+            index_1 = item_strip.find(" ")
+            outputSection = list(map(str.strip, item_strip[index_1+1:].replace("\n", "").split(",")))
 
     return (moduleSection,inputSection,wireSection,outputSection)
 
