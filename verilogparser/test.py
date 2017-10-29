@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
->>> from verilog import *
+>>> from verilogparser import *
 >>> import os
 >>> import itertools
 >>> path=os.path.join(os.getcwd(),"Samples","c17.v")
