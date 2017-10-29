@@ -3,6 +3,9 @@
 >>> from verilogparser import *
 >>> import os
 >>> import itertools
+>>> import coverage
+>>> cov=coverage.Coverage()
+>>> cov.start()
 >>> path=os.path.join(os.getcwd(),"Samples","c17.v")
 >>> test_logics1()
 BUF  1   1
@@ -200,5 +203,7 @@ Help :
 <BLANKLINE>
      - file.v input test vector --> (test case Example : python -m verilog test.v input 1,1,1
      - file.v detail --> (module details)
+>>> cov.stop()
+>>> cov.save()
 
 '''
