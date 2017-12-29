@@ -136,5 +136,4 @@ def bufFuncD(inputVector,inputVectorD,nodeName,Output):
     result=[]
     result.append(inputVectorD[0][0])
     result.append(nodeName+"_"+str(1-Output))
-    print(inputVectorD)
     return result

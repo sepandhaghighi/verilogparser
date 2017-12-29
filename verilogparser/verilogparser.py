@@ -24,8 +24,8 @@ def test_logics2():
 def test_logics1():
     test_table = [1, 0, "x", "z"]
     for item in test_table:
-        print("BUF ",item," ", bufFunc(item))
-        print("NOT ",item," ", notFunc(item))
+        print("BUF ",item," ", bufFunc([item]))
+        print("NOT ",item," ", notFunc([item]))
 def help_func():
     '''
     Print Help Page
