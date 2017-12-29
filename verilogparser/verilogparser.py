@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from .logics import *
+from .deductivelogic import  *
 import itertools
 from functools import partial
 import multiprocessing as mu
@@ -119,28 +120,28 @@ def functionExtractor(splitData):
         output_item=input_vector.pop(0)
         if splited_item[0].upper()=="AND":
             gate_counter[0]=gate_counter[0]+1
-            func_array.append([andFunc,input_vector,output_item])
+            func_array.append([andFunc,input_vector,output_item,andFuncD])
         elif splited_item[0].upper()=="OR":
             gate_counter[1] = gate_counter[1] + 1
-            func_array.append([orFunc, input_vector, output_item])
+            func_array.append([orFunc, input_vector, output_item,orFuncD])
         elif splited_item[0].upper()=="NAND":
             gate_counter[2] = gate_counter[2] + 1
-            func_array.append([nandFunc, input_vector, output_item])
+            func_array.append([nandFunc, input_vector, output_item,nandFuncD])
         elif splited_item[0].upper()=="NOR":
             gate_counter[3] = gate_counter[3] + 1
-            func_array.append([norFunc, input_vector, output_item])
+            func_array.append([norFunc, input_vector, output_item,norFuncD])
         elif splited_item[0].upper() == "XOR":
             gate_counter[4] = gate_counter[4] + 1
-            func_array.append([xorFunc, input_vector, output_item])
+            func_array.append([xorFunc, input_vector, output_item,xorFuncD])
         elif splited_item[0].upper() == "XNOR":
             gate_counter[5] = gate_counter[5] + 1
-            func_array.append([xnorFunc, input_vector, output_item])
+            func_array.append([xnorFunc, input_vector, output_item,xorFuncD])
         elif splited_item[0].upper() == "BUF":
             gate_counter[6] = gate_counter[6] + 1
-            func_array.append([bufFunc, input_vector, output_item])
+            func_array.append([bufFunc, input_vector, output_item,bufFuncD])
         elif splited_item[0].upper() == "NOT":
             gate_counter[7] = gate_counter[7] + 1
-            func_array.append([notFunc, input_vector, output_item])
+            func_array.append([notFunc, input_vector, output_item,bufFuncD])
     return gate_counter
 def print_result(output_dict,input_dict,file):
     sorted_out_vector=str(sorted(output_dict.items()))
@@ -154,13 +155,17 @@ def print_result(output_dict,input_dict,file):
     file.write(line() + "\n")
     print(line())
 
-def get_result(output_dict,input_dict):
+def get_result(output_dict,input_dict,deductive_dict):
     global func_array
     mapFunc=partial(readData,output_dict=output_dict,input_dict=input_dict)
+    for key in input_dict.keys():
+        deductive_dict[key]=[key+"_"+str(1-input_dict[key])]
+    print(deductive_dict)
     for item in func_array:
         input_data = list(map(mapFunc, item[1]))
         output_dict[item[2]]=item[0](input_data)
-    return  output_dict
+        deductive_dict[item[2]]=item[3](input_data,list(map(lambda i:deductive_dict[i],item[1])),item[2],output_dict[item[2]])
+    return  [output_dict,deductive_dict]
 def module_detail(filename):
     try:
         if filename==None:
@@ -217,8 +222,10 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             outputs.extend(wireArray)
             outputs.extend(outputArray)
             output_dict=dict(zip(outputs,len(outputs)*["x"]))
-            result=get_result(output_dict,input_dict)
-            print_result(result,input_dict,output_file)
+            dedcutive_dict=dict(zip(outputs,len(outputs)*[[]]))
+            result=get_result(output_dict,input_dict,dedcutive_dict)
+            print_result(result[0],input_dict,output_file)
+            print(result[1])
         output_file.close()
         timer_2 = time.perf_counter()
         if print_status==True:

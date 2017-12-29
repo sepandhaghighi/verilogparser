@@ -37,10 +37,10 @@ def bufFunc(inputLogic):
     :return: ["x",0,1]
     '''
     temp=inputLogic
-    if temp=="z" or temp=="x":
+    if "z" in temp or "x" in temp:
         return "x"
     else:
-        return temp
+        return temp[0]
 def notFunc(inputLogic):
     '''
     Not Function
@@ -49,9 +49,9 @@ def notFunc(inputLogic):
     :return: ["x",0,1]
     '''
     temp=inputLogic
-    if temp=="z" or temp=="x":
+    if "z" in temp or "x" in temp:
         return "x"
-    elif temp==1:
+    elif 1 in temp:
         return 0
     else:
         return 1
