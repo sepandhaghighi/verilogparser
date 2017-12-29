@@ -106,6 +106,7 @@ def readData(inp,output_dict,input_dict):
         tempLogic = input_dict[inp]
     return tempLogic
 
+
 def functionExtractor(splitData):
     global func_array
     func_array=[]
@@ -113,35 +114,40 @@ def functionExtractor(splitData):
     for item in splitData:
         output_item=""
         input_vector=[]
+        delay=0
         index_1=item.find("(")
         index_2=item.find(")")
         splited_item=item.strip().replace("\n","").split(" ")
         input_vector = list(map(str.strip,item[index_1+1:index_2].replace("\n","").split(",")))
-        output_item=input_vector.pop(0)
+        output_item = input_vector.pop(0)
+        for i in splited_item:
+            if len(i)>1:
+                if i[0]=="#":
+                    delay=int(i[1:])
         if splited_item[0].upper()=="AND":
             gate_counter[0]=gate_counter[0]+1
-            func_array.append([andFunc,input_vector,output_item,andFuncD])
+            func_array.append([andFunc,input_vector,output_item,andFuncD,delay])
         elif splited_item[0].upper()=="OR":
             gate_counter[1] = gate_counter[1] + 1
-            func_array.append([orFunc, input_vector, output_item,orFuncD])
+            func_array.append([orFunc, input_vector, output_item,orFuncD,delay])
         elif splited_item[0].upper()=="NAND":
             gate_counter[2] = gate_counter[2] + 1
-            func_array.append([nandFunc, input_vector, output_item,nandFuncD])
+            func_array.append([nandFunc, input_vector, output_item,nandFuncD,delay])
         elif splited_item[0].upper()=="NOR":
             gate_counter[3] = gate_counter[3] + 1
-            func_array.append([norFunc, input_vector, output_item,norFuncD])
+            func_array.append([norFunc, input_vector, output_item,norFuncD,delay])
         elif splited_item[0].upper() == "XOR":
             gate_counter[4] = gate_counter[4] + 1
-            func_array.append([xorFunc, input_vector, output_item,xorFuncD])
+            func_array.append([xorFunc, input_vector, output_item,xorFuncD,delay])
         elif splited_item[0].upper() == "XNOR":
             gate_counter[5] = gate_counter[5] + 1
-            func_array.append([xnorFunc, input_vector, output_item,xorFuncD])
+            func_array.append([xnorFunc, input_vector, output_item,xorFuncD,delay])
         elif splited_item[0].upper() == "BUF":
             gate_counter[6] = gate_counter[6] + 1
-            func_array.append([bufFunc, input_vector, output_item,bufFuncD])
+            func_array.append([bufFunc, input_vector, output_item,bufFuncD,delay])
         elif splited_item[0].upper() == "NOT":
             gate_counter[7] = gate_counter[7] + 1
-            func_array.append([notFunc, input_vector, output_item,bufFuncD])
+            func_array.append([notFunc, input_vector, output_item,bufFuncD,delay])
     return gate_counter
 def print_result(output_dict,input_dict,file):
     sorted_out_vector=str(sorted(output_dict.items()))
@@ -160,12 +166,30 @@ def get_result(output_dict,input_dict,deductive_dict):
     mapFunc=partial(readData,output_dict=output_dict,input_dict=input_dict)
     for key in input_dict.keys():
         deductive_dict[key]=[key+"_"+str(1-input_dict[key])]
-    print(deductive_dict)
     for item in func_array:
         input_data = list(map(mapFunc, item[1]))
         output_dict[item[2]]=item[0](input_data)
         deductive_dict[item[2]]=item[3](input_data,list(map(lambda i:deductive_dict[i],item[1])),item[2],output_dict[item[2]])
     return  [output_dict,deductive_dict]
+
+def get_result_time(output_dict,input_dict,time_slot):
+    global func_array
+    mapFunc = partial(readData, output_dict=output_dict, input_dict=input_dict)
+    for i in input_dict.keys():
+        input_dict[i]=[input_dict[i]]
+    for i in range(time_slot):
+        for item in func_array:
+            input_data = list(map(mapFunc, item[1]))
+            delay=item[4]
+            if delay<=len(input_data[0]):
+                output_dict[item[2]].append(item[0](list(map(lambda x: x[len(input_data)-delay],input_data))))
+            else:
+                output_dict[item[2]].append(output_dict[item[2]][-1])
+        for i in input_dict.keys():
+            input_dict[i].append(input_dict[i][-1])
+    return output_dict
+
+
 def module_detail(filename):
     try:
         if filename==None:
@@ -221,11 +245,13 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             outputs=[]
             outputs.extend(wireArray)
             outputs.extend(outputArray)
-            output_dict=dict(zip(outputs,len(outputs)*["x"]))
-            dedcutive_dict=dict(zip(outputs,len(outputs)*[[]]))
-            result=get_result(output_dict,input_dict,dedcutive_dict)
-            print_result(result[0],input_dict,output_file)
-            print(result[1])
+            output_dict=dict(zip(outputs,len(outputs)*[["x"]]))
+            #dedcutive_dict=dict(zip(outputs,len(outputs)*[[]]))
+            #result=get_result(output_dict,input_dict,dedcutive_dict)
+            #print_result(result[0],input_dict,output_file)
+            #print(result[1])
+            result=get_result_time(output_dict,input_dict,6)
+            print(result)
         output_file.close()
         timer_2 = time.perf_counter()
         if print_status==True:

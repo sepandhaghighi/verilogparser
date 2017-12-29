@@ -5,16 +5,14 @@
 // NtotalGates 6
 // NAND2 6
 
-module c17 (a,b,e,f,g);
+module c17 (a,b,e);
 
 input a,b;
 
-output g;
+output e;
 
-wire e,f;
 
-and  AND2_1  (e, a, b);
-not  NOT1_1  (f, b);
-or   OR2_2   (g, e, f);
+nand #3 NAND2_1  (e, a, b);
+
 
 endmodule
