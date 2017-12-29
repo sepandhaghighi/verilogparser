@@ -11,7 +11,7 @@ import time
 func_array=[]
 import gc
 import os
-version="0.12"
+version="0.2"
 def test_logics2():
     test_table = itertools.product([1, 0, "x", "z"], repeat=2)
     for item in test_table:
@@ -73,9 +73,20 @@ def time_convert(input_time):
 
 
 def line(char="*",number=30):
+    '''
+    This function return line of chr
+    :param char: line character
+    :param number: number of character
+    :return: line as str
+    '''
     return (char*number)
 
 def moduleExtractor(splitData):
+    '''
+    This function extract modules of verilog file
+    :param splitData: splited data
+    :return: (moduleSection,inputSection,wireSection,outputSection) as tuple
+    '''
 
     moduleSection=[]
     inputSection=[]
@@ -102,6 +113,13 @@ def moduleExtractor(splitData):
     return (moduleSection,inputSection,wireSection,outputSection)
 
 def readData(inp,output_dict,input_dict):
+    '''
+    This function read data from input wire and output
+    :param inp: input name
+    :param output_dict: output dictionary
+    :param input_dict: input dictionary
+    :return: input value
+    '''
     if inp in output_dict.keys():
         tempLogic = output_dict[inp]
     else:
@@ -110,6 +128,11 @@ def readData(inp,output_dict,input_dict):
 
 
 def functionExtractor(splitData):
+    '''
+    This function extract functions from verilog file
+    :param splitData: splited data
+    :return: number of each gates as list
+    '''
     global func_array
     func_array=[]
     gate_counter = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -152,6 +175,13 @@ def functionExtractor(splitData):
             func_array.append([notFunc, input_vector, output_item,bufFuncD,delay])
     return gate_counter
 def print_result(output_dict,input_dict,file):
+    '''
+    This function print and save result in file
+    :param output_dict: output dictionary
+    :param input_dict: input dictionar
+    :param file: file
+    :return: None
+    '''
     sorted_out_vector=str(sorted(output_dict.items()))
     sorted_in_vector=str(sorted(input_dict.items()))
     print("INPUT VECTOR : \n")
@@ -164,6 +194,13 @@ def print_result(output_dict,input_dict,file):
     print(line())
 
 def get_result(output_dict,input_dict,deductive_dict):
+    '''
+    This function calculate resultof each gate
+    :param output_dict:  output dictionar
+    :param input_dict:  input dictionary
+    :param deductive_dict:  dedeuctive dictionary
+    :return: [output_dict,deductive_dict]  as list
+    '''
     global func_array
     mapFunc=partial(readData,output_dict=output_dict,input_dict=input_dict)
     for key in input_dict.keys():
@@ -175,6 +212,13 @@ def get_result(output_dict,input_dict,deductive_dict):
     return  [output_dict,deductive_dict]
 
 def get_result_time(output_dict,input_dict,time_slot):
+    '''
+    This function calculate delay simulation for each input
+    :param output_dict: output dictionary
+    :param input_dict: input dictionary
+    :param time_slot: observation timeslot
+    :return: output dictionary
+    '''
     global func_array
     mapFunc = partial(readData, output_dict=output_dict, input_dict=input_dict)
     for i in input_dict.keys():
@@ -193,6 +237,11 @@ def get_result_time(output_dict,input_dict,time_slot):
 
 
 def module_detail(filename):
+    '''
+    This function show modules details
+    :param filename: verilog file name
+    :return: None
+    '''
     try:
         if filename==None:
             raise  Exception("[Error] Invalid Input File!!")
@@ -221,6 +270,20 @@ def module_detail(filename):
         print(str(e))
 
 def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False,print_status=True,deductive_mode=False,time_mode=False,time_slot=0):
+    '''
+    Main Function of program run simulation in different mode
+    :param filename: verilog file name
+    :param input_data: input data
+    :param alltest: all test mode flag
+    :param random_flag: random test flag
+    :param test_number: number of test
+    :param xz_flag: xz mode flag
+    :param print_status: print simulation status
+    :param deductive_mode: deductive simulation mode flag
+    :param time_mode: delay simulation mode flag
+    :param time_slot: time slot
+    :return: None
+    '''
     try:
         timer_1 = time.perf_counter()
         if filename==None:
@@ -274,6 +337,13 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
 
 
 def shuffeler(length,xz_flag,test_number):
+    '''
+    This function shuffle for random test
+    :param length: length of test
+    :param xz_flag: xz flag mode
+    :param test_number: number of test
+    :return: test vectors
+    '''
     basis=[1,0]
     generator=[]
     table_length=2**length
@@ -283,6 +353,7 @@ def shuffeler(length,xz_flag,test_number):
     for i in range(length):
         random.shuffle(basis)
         generator.append(basis)
+        random.shuffle(generator)
     table=itertools.product(*generator)
     return itertools.islice(table,min(test_number,table_length))
 
