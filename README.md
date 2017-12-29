@@ -41,6 +41,8 @@ Simple verilog parser in python
 - Test Random Cases : `python -m verilogparser  file.v random test_number(*optional)`
 - Manually Test : `python -m verilogparser file.v input input_vector`
 - Module Detail : `python -m verilogparser file.v detail`
+- Deductive Simulation : `python -m verilogparser file.v input 1,1 deductive` or `python -m verilogparser file.v all deductive`
+- Delay Simulation : `python -m verilogparser file.v input 1,1 time slot`
 
 <div align="center">
 <a href="https://asciinema.org/a/144795" target="_blank"><img src="https://asciinema.org/a/144795.png" /></a>
