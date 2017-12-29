@@ -37,8 +37,10 @@ def help_func():
     print("Help : \n")
     print("     - file.v all --> (test all cases)\n")
     print("     - file.v random test_number(optional) --> (test random cases)\n")
-    print("     - file.v input test vector --> (test case Example : python -m verilog test.v input 1,1,1)\n")
+    print("     - file.v input test vector --> (test case Example : python -m verilogparser test.v input 1,1,1)\n")
     print("     - file.v detail --> (module details)")
+    print("     - file.v deductive --> (deductive analysis)")
+    print("     - file.v time timeslot --> (delay analysis Example : python -m verilogparser test.v input 1,1,1 time 12)")
 def zero_insert(input_string):
     '''
     This function get a string as input if input is one digit add a zero
