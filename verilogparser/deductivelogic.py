@@ -3,7 +3,12 @@ from functools import reduce
 
 def andFuncD(inputVector,inputVectorD,nodeName,Output):
     '''
-    And Function Deductive
+    And Function Deductive Logic
+    :param inputVector: input logic vector
+    :param inputVectorD: input  stack-at-fault vector
+    :param nodeName: output node name
+    :param Output: output node value
+    :return: list of stack-at-fault
     '''
     S=[]
     result={}
@@ -25,7 +30,12 @@ def andFuncD(inputVector,inputVectorD,nodeName,Output):
 
 def nandFuncD(inputVector,inputVectorD,nodeName,Output):
     '''
-    And Function Deductive
+    Nand Function Deductive Logic
+    :param inputVector: input logic vector
+    :param inputVectorD: input  stack-at-fault vector
+    :param nodeName: output node name
+    :param Output: output node value
+    :return: list of stack-at-fault
     '''
     S=[]
     result={}
@@ -47,7 +57,12 @@ def nandFuncD(inputVector,inputVectorD,nodeName,Output):
 
 def orFuncD(inputVector,inputVectorD,nodeName,Output):
     '''
-    And Function Deductive
+    Or Function Deductive Logic
+    :param inputVector: input logic vector
+    :param inputVectorD: input  stack-at-fault vector
+    :param nodeName: output node name
+    :param Output: output node value
+    :return: list of stack-at-fault
     '''
     S=[]
     result={}
@@ -68,7 +83,12 @@ def orFuncD(inputVector,inputVectorD,nodeName,Output):
 
 def norFuncD(inputVector,inputVectorD,nodeName,Output):
     '''
-    And Function Deductive
+    Nor Function Deductive Logic
+    :param inputVector: input logic vector
+    :param inputVectorD: input  stack-at-fault vector
+    :param nodeName: output node name
+    :param Output: output node value
+    :return: list of stack-at-fault
     '''
     S=[]
     result={}
@@ -89,7 +109,12 @@ def norFuncD(inputVector,inputVectorD,nodeName,Output):
 
 def xorFuncD(inputVector,inputVectorD,nodeName,Output):
     '''
-    And Function Deductive
+    Xor Function Deductive Logic
+    :param inputVector: input logic vector
+    :param inputVectorD: input  stack-at-fault vector
+    :param nodeName: output node name
+    :param Output: output node value
+    :return: list of stack-at-fault
     '''
     result={}
     inputVectorDTemp=list(inputVectorD)
@@ -100,6 +125,14 @@ def xorFuncD(inputVector,inputVectorD,nodeName,Output):
     return result
 
 def bufFuncD(inputVector,inputVectorD,nodeName,Output):
+    '''
+    buf Function Deductive Logic
+    :param inputVector: input logic vector
+    :param inputVectorD: input  stack-at-fault vector
+    :param nodeName: output node name
+    :param Output: output node value
+    :return: list of stack-at-fault
+    '''
     result=[]
     result.append(inputVectorD[0][0])
     result.append(nodeName+"_"+str(1-Output))
