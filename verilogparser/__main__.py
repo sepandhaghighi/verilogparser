@@ -18,6 +18,9 @@ if __name__=="__main__":
     test_number=100
     all_mode=False
     random_mode=False
+    deductive_mode=False
+    time_mode=False
+    time_slot=0
     upper_args=list(map(str.upper,args))
     if "TEST" in upper_args:
         doctest.testfile("test.py", optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS, verbose=True)
@@ -37,6 +40,16 @@ if __name__=="__main__":
                 test_number=int(args[index+1])
         except ValueError:
             pass
+    if "DEDUCTIVE" in upper_args:
+        deductive_mode=True
+    if "TIME" in upper_args:
+        time_mode=True
+        index = upper_args.index("TIME")
+        if len(upper_args) > index + 1:
+            try:
+                time_slot = int(upper_args[index+1])
+            except:
+                pass
     if ("ALL" in upper_args) and (len(upper_args)>2):
         all_mode=True
     if "HELP" in upper_args:
@@ -47,9 +60,9 @@ if __name__=="__main__":
         sys.exit()
 
     if all_mode==True:
-        verilog_parser(filename,alltest=True,random_flag=random_mode,xz_flag=xz_flag,test_number=test_number)
+        verilog_parser(filename,alltest=True,random_flag=random_mode,xz_flag=xz_flag,test_number=test_number,deductive_mode=deductive_mode,time_slot=time_slot,time_mode=time_mode)
     else:
-        verilog_parser(filename,input_data=input_data)
+        verilog_parser(filename,input_data=input_data,deductive_mode=deductive_mode,time_slot=time_slot,time_mode=time_mode)
 
 
 

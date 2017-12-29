@@ -218,7 +218,7 @@ def module_detail(filename):
     except Exception as e:
         print(str(e))
 
-def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False,print_status=True):
+def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False,print_status=True,deductive_mode=False,time_mode=False,time_slot=0):
     try:
         timer_1 = time.perf_counter()
         if filename==None:
@@ -230,6 +230,8 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         input_dict={}
         test_table=[]
         output_file=open(os.path.basename(filename).split(".")[0]+".log","w")
+        if deductive_mode==True and time_mode==False:
+            deductive_file=open(os.path.basename(filename).split(".")[0]+".ds","w")
         gate_counter=functionExtractor(splitData)
         if alltest==True:
             test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number,xz_flag=xz_flag)
@@ -246,13 +248,18 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             outputs.extend(wireArray)
             outputs.extend(outputArray)
             output_dict=dict(zip(outputs,len(outputs)*[["x"]]))
-            #dedcutive_dict=dict(zip(outputs,len(outputs)*[[]]))
-            #result=get_result(output_dict,input_dict,dedcutive_dict)
-            #print_result(result[0],input_dict,output_file)
-            #print(result[1])
-            result=get_result_time(output_dict,input_dict,6)
-            print(result)
+            dedcutive_dict=dict(zip(outputs,len(outputs)*[[]]))
+            if time_mode==True:
+                result=get_result_time(output_dict,input_dict,time_slot)
+                print_result(result, input_dict, output_file)
+            else:
+                result = get_result(output_dict, input_dict, dedcutive_dict)
+                if deductive_mode==True:
+                    print_result(result[1],input_dict,deductive_file)
+                print_result(result[0],input_dict,output_file)
         output_file.close()
+        if deductive_mode==True and time_mode==False:
+            deductive_file.close()
         timer_2 = time.perf_counter()
         if print_status==True:
             print("Simulation Time : " + time_convert(timer_2 - timer_1))
