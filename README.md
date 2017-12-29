@@ -25,12 +25,13 @@ Simple verilog parser in python
 
 ### Source Code
 - Download [Version 0.12](https://github.com/sepandhaghighi/verilogparser/archive/v0.12.zip) or [Latest Source ](https://github.com/sepandhaghighi/verilogparser/archive/master.zip)
+-  Run `pip install -r requirements.txt` or `pip3 install -r requirements.txt` (Need root access)
 - `python3 setup.py install` or `python setup.py install` (Need root access)				
 
 ### PyPI
 
 
-- Check [Python Packaging User Guide](https://packaging.python.org/installing/)     
+- Check [Python Packaging User Guide](https://packaging.python.org/installing/)   
 - `pip install verilogparser` or `pip3 install verilogparser` (Need root access)
 
 ## Usage
