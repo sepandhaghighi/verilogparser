@@ -337,7 +337,7 @@ def module_detail(filename):
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
     except Exception as e:
-        print(str(e))
+        print("Parsing Faild!")
 
 def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False,print_status=True,deductive_mode=False,time_mode=False,time_slot=0):
     '''
@@ -412,7 +412,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         print("[Error] Verilog File Not Found")
         print("Simulation Faild!")
     except Exception as e:
-        print(str(e))
+        print("Simulation Faild!")
 
 
 def shuffler(length,xz_flag,test_number):
