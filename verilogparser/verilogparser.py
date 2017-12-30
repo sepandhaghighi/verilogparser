@@ -202,6 +202,36 @@ def functionExtractor(splitData):
             gate_counter[7] = gate_counter[7] + 1
             func_array.append([notFunc, input_vector, output_item,bufFuncD,delay])
     return gate_counter
+def csv_init(input_array,wire_array,output_array,file):
+    input_keys = []
+    input_keys.extend(input_array)
+    input_keys.extend(wire_array)
+    input_keys.sort()
+    output_keys = []
+    output_keys.extend(output_array)
+    output_keys.sort()
+    for inp in input_keys:
+        file.write(inp+",")
+    for index,out in enumerate(output_keys):
+        file.write(out)
+        if index<len(output_keys):
+            file.write(",")
+    file.write("\n")
+def csv_writer(output_dict,input_dict,file):
+    input_keys=list(input_dict.keys())
+    input_keys.sort()
+    output_keys=list(output_dict.keys())
+    output_keys.sort()
+    for inp in input_keys:
+        file.write(str(input_dict[inp])+",")
+    for index,out in enumerate(output_keys):
+        file.write(str(output_dict[out]))
+        if index<len(output_keys):
+            file.write(",")
+    file.write("\n")
+
+
+
 def print_result(output_dict,input_dict,file):
     '''
     This function print and save result in file
@@ -340,6 +370,8 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         input_dict={}
         test_table=[]
         output_file=open(os.path.basename(filename).split(".")[0]+".log","w")
+        csv_file=open(os.path.basename(filename).split(".")[0]+".csv","w")
+        csv_init(inputArray,wireArray,outputArray,csv_file)
         if deductive_mode==True and time_mode==False:
             deductive_file=open(os.path.basename(filename).split(".")[0]+".ds","w")
         gate_counter=functionExtractor(splitData)
@@ -362,12 +394,15 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             if time_mode==True:
                 result=get_result_time(output_dict,input_dict,time_slot)
                 print_result(result, input_dict, output_file)
+                csv_writer(result,input_dict,csv_file)
             else:
                 result = get_result(output_dict, input_dict, dedcutive_dict)
                 if deductive_mode==True:
                     print_result(result[1],input_dict,deductive_file)
+                csv_writer(result[0],input_dict,csv_file)
                 print_result(result[0],input_dict,output_file)
         output_file.close()
+        csv_file.close()
         if deductive_mode==True and time_mode==False:
             deductive_file.close()
         timer_2 = time.perf_counter()
