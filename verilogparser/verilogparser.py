@@ -228,6 +228,31 @@ def csv_writer(output_dict,input_dict,file):
             file.write(",")
     file.write("\n")
 
+def csv_time_writer(output_dict,input_dict,file):
+    input_keys = list(input_dict.keys())
+    input_keys.sort()
+    output_keys = list(output_dict.keys())
+    output_keys.sort()
+    for inp in input_keys:
+        file.write(str(inp)+",")
+        print(input_dict[inp])
+        file.write(",".join(list(map(str,input_dict[inp]))))
+        file.write("\n")
+    for out in output_keys:
+        file.write(out)
+        file.write(",")
+        file.write(",".join(list(map(str,output_dict[out]))))
+        file.write("\n")
+
+def csv_time_init(time_slot,file):
+    file.write("Input,")
+    for i in range(time_slot+1):
+        file.write("T"+str(i))
+        if i<time_slot+1:
+            file.write(",")
+    file.write("\n")
+
+
 
 
 def print_result(output_dict,input_dict,file):
@@ -288,6 +313,7 @@ def get_result_time(output_dict,input_dict,time_slot):
     :return: output dictionary
     '''
     global func_array
+    output_dict_temp=output_dict.copy()
     mapFunc = partial(readData, output_dict=output_dict, input_dict=input_dict)
     for i in input_dict.keys():
         input_dict[i]=[input_dict[i]]
@@ -296,12 +322,13 @@ def get_result_time(output_dict,input_dict,time_slot):
             input_data = list(map(mapFunc, item[1]))
             delay=item[4]
             if delay<=len(input_data[0]):
-                output_dict[item[2]].append(item[0](list(map(lambda x: x[len(input_data)-delay],input_data))))
+                output_dict_temp[item[2]].append(item[0](list(map(lambda x: x[len(input_data)-delay],input_data))))
             else:
-                output_dict[item[2]].append(output_dict[item[2]][-1])
-        for i in input_dict.keys():
-            input_dict[i].append(input_dict[i][-1])
-    return output_dict
+                pointer=item[2]
+                output_dict_temp[pointer].append(output_dict_temp[item[2]][-1])
+        for j in input_dict.keys():
+            input_dict[j].append(input_dict[j][-1])
+    return output_dict_temp
 
 
 def module_detail(filename):
@@ -373,6 +400,9 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         functionExtractor(splitData)
         if deductive_mode==True and time_mode==False:
             deductive_file=open(os.path.basename(filename).split(".")[0]+".ds","w")
+        if time_mode==True:
+            time_csv_file = open(os.path.basename(filename).split(".")[0] + "_time.csv", "w")
+            csv_time_init(time_slot,time_csv_file)
         if alltest==True:
             test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number,xz_flag=xz_flag)
         else:
@@ -387,11 +417,12 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             outputs=[]
             outputs.extend(wireArray)
             outputs.extend(outputArray)
-            output_dict=dict(zip(outputs,len(outputs)*[["x"]]))
+            output_dict={k:["x"] for k in outputs}
             dedcutive_dict=dict(zip(outputs,len(outputs)*[[]]))
             if time_mode==True:
                 result=get_result_time(output_dict,input_dict,time_slot)
                 print_result(result, input_dict, output_file)
+                csv_time_writer(result,input_dict,time_csv_file)
                 #result = get_result(output_dict, input_dict, dedcutive_dict)
                 #csv_writer(result[0], input_dict, csv_file)
                 #print_result(result[0], input_dict, output_file)
@@ -405,6 +436,8 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         csv_file.close()
         if deductive_mode==True and time_mode==False:
             deductive_file.close()
+        if time_mode==True:
+            time_csv_file.close()
         timer_2 = time.perf_counter()
         if print_status==True:
             print("Simulation Time : " + time_convert(timer_2 - timer_1))
