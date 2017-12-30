@@ -24,7 +24,7 @@ Simple verilog parser in python
 ## Installation		
 
 ### Source Code
-- Download [Version 0.12](https://github.com/sepandhaghighi/verilogparser/archive/v0.12.zip) or [Latest Source ](https://github.com/sepandhaghighi/verilogparser/archive/master.zip)
+- Download [Version 0.2](https://github.com/sepandhaghighi/verilogparser/archive/v0.2.zip) or [Latest Source ](https://github.com/sepandhaghighi/verilogparser/archive/master.zip)
 -  Run `pip install -r requirements.txt` or `pip3 install -r requirements.txt` (Need root access)
 - `python3 setup.py install` or `python setup.py install` (Need root access)				
 
