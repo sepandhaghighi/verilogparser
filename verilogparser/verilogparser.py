@@ -235,7 +235,6 @@ def csv_time_writer(output_dict,input_dict,file):
     output_keys.sort()
     for inp in input_keys:
         file.write(str(inp)+",")
-        print(input_dict[inp])
         file.write(",".join(list(map(str,input_dict[inp]))))
         file.write("\n")
     for out in output_keys:
