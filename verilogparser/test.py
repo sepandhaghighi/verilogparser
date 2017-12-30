@@ -208,7 +208,7 @@ Help :
      - file.v detail --> (module details)
      - file.v deductive --> (deductive analysis)
      - file.v time timeslot --> (delay analysis Example : python -m verilogparser test.v input 1,1,1 time 12)
->>> path=os.path.join(os.getcwd(),"Samples","deducttest.v")
+>>> path=os.path.join(os.getcwd(),"Samples","deducttest2.v")
 >>> verilog_parser(path,input_data=[1,1],alltest=False,random_flag=False,test_number=100,xz_flag=False,print_status=False,deductive_mode=True,time_mode=False,time_slot=0)
 INPUT VECTOR :
 <BLANKLINE>
@@ -216,7 +216,7 @@ INPUT VECTOR :
 <BLANKLINE>
 NODES :
 <BLANKLINE>
-[('a', ['a_0']), ('b', ['b_0']), ('e', ['b_0', 'a_0', 'e_1']), ('f', ['f_0']), ('g', ['b_0', 'a_0', 'g_0']), ('h', ['a_0', 'h_0']), ('i', ['a_0', 'i_1']), ('j', ['b_0', 'a_0', 'j_1']), ('k', ['b_0', 'a_0', 'k_0']), ('l', ['l_1'])]
+[('FANOUT1(b)_0', ['b_0', 'FANOUT1(b)_0']), ('FANOUT2(b)_0', ['b_0', 'FANOUT2(b)_0']), ('a', ['a_0']), ('b', ['b_0']), ('e', ['FANOUT2(b)_0', 'a_0', 'b_0', 'e_0']), ('f', ['b_0', 'FANOUT1(b)_0', 'f_1']), ('g', ['FANOUT2(b)_0', 'a_0', 'e_0', 'g_0'])]
 <BLANKLINE>
 ******************************
 INPUT VECTOR :
@@ -225,9 +225,10 @@ INPUT VECTOR :
 <BLANKLINE>
 NODES :
 <BLANKLINE>
-[('e', 0), ('f', 1), ('g', 1), ('h', 1), ('i', 0), ('j', 0), ('k', 1), ('l', 0)]
+[('e', 1), ('f', 0), ('g', 1)]
 <BLANKLINE>
 ******************************
+>>> path=os.path.join(os.getcwd(),"Samples","deducttest.v")
 >>> verilog_parser(path,input_data=[1,1],alltest=False,random_flag=False,test_number=100,xz_flag=False,print_status=False,deductive_mode=False,time_mode=True,time_slot=10)
 INPUT VECTOR :
 <BLANKLINE>

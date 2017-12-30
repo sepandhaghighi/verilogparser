@@ -243,7 +243,6 @@ def get_result(output_dict,input_dict,deductive_dict):
                 deductive_dict[j].append("FANOUT"+str(fanout_dict[j])+"("+j+")_"+str(1-input_data[index]))
                 fanout_added.append(j)
                 fanout_dict[j]=fanout_dict[j]-1
-        print(list(map(lambda i: deductive_dict[i], item[1])))
         deductive_dict[item[2]]=item[3](input_data,list(map(lambda i:deductive_dict[i],item[1])),item[2],output_dict[item[2]])
         for i in fanout_added:
             fanout=deductive_dict[i][-1]
