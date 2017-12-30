@@ -119,7 +119,7 @@ def moduleExtractor(splitData):
             index_1 = item_strip.find(" ")
             outputSection = list(map(str.strip, item_strip[index_1+1:].replace("\n", "").split(",")))
 
-    return (moduleSection,inputSection,wireSection,outputSection)
+    return (inputSection,wireSection,outputSection)
 
 def readData(inp,output_dict,input_dict):
     '''
@@ -316,7 +316,7 @@ def module_detail(filename):
         file = open(filename, "r")
         data = file.read()
         splitData = data.strip().split(";")
-        (module, inputArray, wireArray, outputArray) = moduleExtractor(splitData)
+        (inputArray, wireArray, outputArray) = moduleExtractor(splitData)
         tprint(os.path.basename(filename),font="slant")
         print(line())
         print("Input Size : "+str(len(inputArray)))
@@ -334,7 +334,7 @@ def module_detail(filename):
         gc.collect()
     except FileNotFoundError:
         print("[Error] Verilog File Not Found")
-    except Exception as e:
+    except Exception:
         print("Parsing Faild!")
 
 def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test_number=100,xz_flag=False,print_status=True,deductive_mode=False,time_mode=False,time_slot=0):
@@ -361,7 +361,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         file=open(filename,"r")
         data=file.read()
         splitData = data.strip().split(";")
-        (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
+        (inputArray,wireArray,outputArray)=moduleExtractor(splitData)
         fanout_keys.extend(wireArray)
         fanout_keys.extend(inputArray)
         fanout_dict=dict(zip(fanout_keys,len(fanout_keys)*[0]))
