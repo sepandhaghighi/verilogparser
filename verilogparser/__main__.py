@@ -22,6 +22,9 @@ if __name__=="__main__":
     time_mode=False
     time_slot=0
     upper_args=list(map(str.upper,args))
+    if len(upper_args)==1:
+        help_func()
+        sys.exit()
     if "TEST" in upper_args:
         doctest.testfile("test.py", optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS, verbose=True)
         sys.exit()
