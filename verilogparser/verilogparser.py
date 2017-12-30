@@ -394,6 +394,9 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             if time_mode==True:
                 result=get_result_time(output_dict,input_dict,time_slot)
                 print_result(result, input_dict, output_file)
+                result = get_result(output_dict, input_dict, dedcutive_dict)
+                csv_writer(result[0], input_dict, csv_file)
+                print_result(result[0], input_dict, output_file)
             else:
                 result = get_result(output_dict, input_dict, dedcutive_dict)
                 if deductive_mode==True:
