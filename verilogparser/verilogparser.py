@@ -363,6 +363,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         file=open(filename,"r")
         data=file.read()
         splitData = data.strip().split(";")
+        gate_counter = functionExtractor(splitData)
         (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
         fanout_keys.extend(wireArray)
         fanout_keys.extend(inputArray)
@@ -374,7 +375,6 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         csv_init(inputArray,wireArray,outputArray,csv_file)
         if deductive_mode==True and time_mode==False:
             deductive_file=open(os.path.basename(filename).split(".")[0]+".ds","w")
-        gate_counter=functionExtractor(splitData)
         if alltest==True:
             test_table=test_maker(len(inputArray),random_flag=random_flag,test_number=test_number,xz_flag=xz_flag)
         else:
@@ -394,7 +394,6 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
             if time_mode==True:
                 result=get_result_time(output_dict,input_dict,time_slot)
                 print_result(result, input_dict, output_file)
-                csv_writer(result,input_dict,csv_file)
             else:
                 result = get_result(output_dict, input_dict, dedcutive_dict)
                 if deductive_mode==True:
