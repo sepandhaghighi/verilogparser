@@ -232,6 +232,7 @@ def get_result(output_dict,input_dict,deductive_dict):
     global func_array
     mapFunc=partial(readData,output_dict=output_dict,input_dict=input_dict)
     fanout_dict_handler()
+    fanout_dict_temp=fanout_dict.copy()
     for key in input_dict.keys():
         deductive_dict[key]=[key+"_"+str(1-input_dict[key])]
     for item in func_array:
@@ -239,10 +240,10 @@ def get_result(output_dict,input_dict,deductive_dict):
         input_data = list(map(mapFunc, item[1]))
         output_dict[item[2]] = item[0](input_data)
         for index,j in enumerate(item[1]):
-            if fanout_dict[j]>0:
-                deductive_dict[j].append("FANOUT"+str(fanout_dict[j])+"("+j+")_"+str(1-input_data[index]))
+            if fanout_dict_temp[j]>0:
+                deductive_dict[j].append("FANOUT"+str(fanout_dict_temp[j])+"("+j+")_"+str(1-input_data[index]))
                 fanout_added.append(j)
-                fanout_dict[j]=fanout_dict[j]-1
+                fanout_dict_temp[j]=fanout_dict_temp[j]-1
         deductive_dict[item[2]]=item[3](input_data,list(map(lambda i:deductive_dict[i],item[1])),item[2],output_dict[item[2]])
         for i in fanout_added:
             fanout=deductive_dict[i][-1]
