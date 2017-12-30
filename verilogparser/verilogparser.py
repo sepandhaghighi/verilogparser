@@ -9,6 +9,7 @@ from art import tprint
 import random
 import time
 func_array=[]
+fanout_dict={}
 import gc
 import os
 version="0.2"
@@ -41,6 +42,16 @@ def help_func():
     print("     - file.v detail --> (module details)")
     print("     - file.v deductive --> (deductive analysis)")
     print("     - file.v time timeslot --> (delay analysis Example : python -m verilogparser test.v input 1,1,1 time 12)")
+
+def fanout_dict_handler():
+    '''
+    This function remove one wire output from fanout_dict
+    :return: None
+    '''
+    global fanout_dict
+    for i in fanout_dict.keys():
+        if fanout_dict[i]==1:
+            fanout_dict[i]=0
 def zero_insert(input_string):
     '''
     This function get a string as input if input is one digit add a zero
@@ -134,6 +145,7 @@ def functionExtractor(splitData):
     :return: number of each gates as list
     '''
     global func_array
+    global fanout_dict
     func_array=[]
     gate_counter = [0, 0, 0, 0, 0, 0, 0, 0]
     for item in splitData:
@@ -150,27 +162,43 @@ def functionExtractor(splitData):
                 if i[0]=="#":
                     delay=int(i[1:])
         if splited_item[0].upper()=="AND":
+            for i in input_vector:
+                fanout_dict[i] = fanout_dict[i] + 1
             gate_counter[0]=gate_counter[0]+1
             func_array.append([andFunc,input_vector,output_item,andFuncD,delay])
         elif splited_item[0].upper()=="OR":
+            for i in input_vector:
+                fanout_dict[i] = fanout_dict[i] + 1
             gate_counter[1] = gate_counter[1] + 1
             func_array.append([orFunc, input_vector, output_item,orFuncD,delay])
         elif splited_item[0].upper()=="NAND":
+            for i in input_vector:
+                fanout_dict[i] = fanout_dict[i] + 1
             gate_counter[2] = gate_counter[2] + 1
             func_array.append([nandFunc, input_vector, output_item,nandFuncD,delay])
         elif splited_item[0].upper()=="NOR":
+            for i in input_vector:
+                fanout_dict[i] = fanout_dict[i] + 1
             gate_counter[3] = gate_counter[3] + 1
             func_array.append([norFunc, input_vector, output_item,norFuncD,delay])
         elif splited_item[0].upper() == "XOR":
+            for i in input_vector:
+                fanout_dict[i] = fanout_dict[i] + 1
             gate_counter[4] = gate_counter[4] + 1
             func_array.append([xorFunc, input_vector, output_item,xorFuncD,delay])
         elif splited_item[0].upper() == "XNOR":
+            for i in input_vector:
+                fanout_dict[i] = fanout_dict[i] + 1
             gate_counter[5] = gate_counter[5] + 1
             func_array.append([xnorFunc, input_vector, output_item,xorFuncD,delay])
         elif splited_item[0].upper() == "BUF":
+            for i in input_vector:
+                fanout_dict[i] = fanout_dict[i] + 1
             gate_counter[6] = gate_counter[6] + 1
             func_array.append([bufFunc, input_vector, output_item,bufFuncD,delay])
         elif splited_item[0].upper() == "NOT":
+            for i in input_vector:
+                fanout_dict[i] = fanout_dict[i] + 1
             gate_counter[7] = gate_counter[7] + 1
             func_array.append([notFunc, input_vector, output_item,bufFuncD,delay])
     return gate_counter
@@ -196,19 +224,31 @@ def print_result(output_dict,input_dict,file):
 def get_result(output_dict,input_dict,deductive_dict):
     '''
     This function calculate resultof each gate
-    :param output_dict:  output dictionar
+    :param output_dict:  output dictionary
     :param input_dict:  input dictionary
     :param deductive_dict:  dedeuctive dictionary
     :return: [output_dict,deductive_dict]  as list
     '''
     global func_array
     mapFunc=partial(readData,output_dict=output_dict,input_dict=input_dict)
+    fanout_dict_handler()
     for key in input_dict.keys():
         deductive_dict[key]=[key+"_"+str(1-input_dict[key])]
     for item in func_array:
+        fanout_added=[]
         input_data = list(map(mapFunc, item[1]))
-        output_dict[item[2]]=item[0](input_data)
+        output_dict[item[2]] = item[0](input_data)
+        for index,j in enumerate(item[1]):
+            if fanout_dict[j]>0:
+                deductive_dict[j].append("FANOUT"+str(fanout_dict[j])+"("+j+")_"+str(1-input_data[index]))
+                fanout_added.append(j)
+                fanout_dict[j]=fanout_dict[j]-1
+        print(list(map(lambda i: deductive_dict[i], item[1])))
         deductive_dict[item[2]]=item[3](input_data,list(map(lambda i:deductive_dict[i],item[1])),item[2],output_dict[item[2]])
+        for i in fanout_added:
+            fanout=deductive_dict[i][-1]
+            deductive_dict[fanout]=deductive_dict[i]
+            deductive_dict[i]=deductive_dict[i][:-1]
     return  [output_dict,deductive_dict]
 
 def get_result_time(output_dict,input_dict,time_slot):
@@ -285,13 +325,18 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
     :return: None
     '''
     try:
+        global fanout_dict
         timer_1 = time.perf_counter()
+        fanout_keys=[]
         if filename==None:
             raise  Exception("[Error] Invalid Input File!!")
         file=open(filename,"r")
         data=file.read()
         splitData = data.strip().split(";")
         (module,inputArray,wireArray,outputArray)=moduleExtractor(splitData)
+        fanout_keys.extend(wireArray)
+        fanout_keys.extend(inputArray)
+        fanout_dict=dict(zip(fanout_keys,len(fanout_keys)*[0]))
         input_dict={}
         test_table=[]
         output_file=open(os.path.basename(filename).split(".")[0]+".log","w")

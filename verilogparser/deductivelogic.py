@@ -134,6 +134,6 @@ def bufFuncD(inputVector,inputVectorD,nodeName,Output):
     :return: list of stack-at-fault
     '''
     result=[]
-    result.append(inputVectorD[0][0])
+    result.extend(inputVectorD[0])
     result.append(nodeName+"_"+str(1-Output))
     return result
