@@ -42,6 +42,7 @@ if __name__=="__main__":
             pass
     if "DEDUCTIVE" in upper_args:
         deductive_mode=True
+        xz_flag=False
     if "TIME" in upper_args:
         time_mode=True
         index = upper_args.index("TIME")
