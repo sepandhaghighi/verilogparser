@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-import re
 from .logics import *
 from .deductivelogic import  *
 import itertools
 from functools import partial
-import multiprocessing as mu
 from art import tprint
 import random
 import time
