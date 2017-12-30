@@ -370,7 +370,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         output_file=open(os.path.basename(filename).split(".")[0]+".log","w")
         csv_file=open(os.path.basename(filename).split(".")[0]+".csv","w")
         csv_init(inputArray,wireArray,outputArray,csv_file)
-        gate_counter = functionExtractor(splitData)
+        functionExtractor(splitData)
         if deductive_mode==True and time_mode==False:
             deductive_file=open(os.path.basename(filename).split(".")[0]+".ds","w")
         if alltest==True:
