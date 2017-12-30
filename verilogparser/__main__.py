@@ -49,7 +49,7 @@ if __name__=="__main__":
         if len(upper_args) > index + 1:
             try:
                 time_slot = int(upper_args[index+1])
-            except:
+            except Exception:
                 pass
     if ("ALL" in upper_args) and (len(upper_args)>2):
         all_mode=True
