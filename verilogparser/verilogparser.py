@@ -416,7 +416,7 @@ def verilog_parser(filename,input_data=None,alltest=False,random_flag=False,test
         print(str(e))
 
 
-def shuffeler(length,xz_flag,test_number):
+def shuffler(length,xz_flag,test_number):
     '''
     This function shuffle for random test
     :param length: length of test
@@ -453,7 +453,7 @@ def test_maker(length,random_flag=False,test_number=100,xz_flag=False):
         if random_flag==False:
             return table
         else:
-            return shuffeler(length,xz_flag,test_number)
+            return shuffler(length,xz_flag,test_number)
     except ValueError:
-        return shuffeler(length,xz_flag,test_number)
+        return shuffler(length,xz_flag,test_number)
 
