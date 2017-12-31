@@ -20,7 +20,8 @@ __   __  ___  _ __ (_)| |  ___    __ _  _ __    __ _  _ __  ___   ___  _ __
 
 
 ## Overview			
-Simple verilog parser and simulation in python
+Simple verilog parser and simulator in python
+
 <div align="center">
 
 
