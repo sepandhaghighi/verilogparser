@@ -53,7 +53,7 @@ if __name__=="__main__":
             try:
                 time_slot = int(upper_args[index+1])
             except Exception:
-                pass
+                time_slot = 1
     if ("ALL" in upper_args) and (len(upper_args)>2):
         all_mode=True
     if "HELP" in upper_args:
