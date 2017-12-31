@@ -18,8 +18,16 @@ __   __  ___  _ __ (_)| |  ___    __ _  _ __    __ _  _ __  ___   ___  _ __
 	
 ----------
 
+
 ## Overview			
-Simple verilog parser in python
+Simple verilog parser and simulation in python
+<div align="center">
+
+
+<img src="otherfiles/flow.jpg">
+<p>Application FlowChart</p>
+
+</div>
 
 ## Installation		
 
