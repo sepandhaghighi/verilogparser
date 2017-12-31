@@ -12,6 +12,10 @@ import gc
 import os
 version="0.2"
 def test_logics2():
+    '''
+    This function run testbench for OR,NOR,XOR,XNOR,AND,NAND
+    :return:  None
+    '''
     test_table = itertools.product([1, 0, "x", "z"], repeat=2)
     for item in test_table:
         print("OR ",item," ",orFunc(item))
@@ -21,6 +25,10 @@ def test_logics2():
         print("AND ",item," ", andFunc(item))
         print("NAND ",item," ", nandFunc(item))
 def test_logics1():
+    '''
+    This function run testbench for BUF and NOT
+    :return:  None
+    '''
     test_table = [1, 0, "x", "z"]
     for item in test_table:
         print("BUF ",item," ", bufFunc([item]))
@@ -201,6 +209,14 @@ def functionExtractor(splitData):
             func_array.append([notFunc, input_vector, output_item,bufFuncD,delay])
     return gate_counter
 def csv_init(input_array,wire_array,output_array,file):
+    '''
+    This function initiate csv out file
+    :param input_array: input names
+    :param wire_array: wire names
+    :param output_array: output names
+    :param file: csv file object
+    :return: None
+    '''
     input_keys = []
     input_keys.extend(input_array)
     input_keys.extend(wire_array)
@@ -216,6 +232,13 @@ def csv_init(input_array,wire_array,output_array,file):
             file.write(",")
     file.write("\n")
 def csv_writer(output_dict,input_dict,file):
+    '''
+    This function write each line of csv file
+    :param output_dict: output dictionary
+    :param input_dict: input dictionary
+    :param file: csv file object
+    :return: None
+    '''
     input_keys=list(input_dict.keys())
     input_keys.sort()
     output_keys=list(output_dict.keys())
@@ -229,6 +252,13 @@ def csv_writer(output_dict,input_dict,file):
     file.write("\n")
 
 def csv_time_writer(output_dict,input_dict,file):
+    '''
+    This function write csv_file for time simulation
+    :param output_dict: time simulation output dictionary
+    :param input_dict: input dictionary
+    :param file: csv_time file object
+    :return:  None
+    '''
     input_keys = list(input_dict.keys())
     input_keys.sort()
     output_keys = list(output_dict.keys())
@@ -244,6 +274,12 @@ def csv_time_writer(output_dict,input_dict,file):
         file.write("\n")
 
 def csv_time_init(time_slot,file):
+    '''
+    This function initiate csv_file for time simulation
+    :param time_slot: time slot for time simulation
+    :param file: csv_time file object
+    :return: None
+    '''
     file.write("Input,")
     for i in range(time_slot+1):
         file.write("T"+str(i))
