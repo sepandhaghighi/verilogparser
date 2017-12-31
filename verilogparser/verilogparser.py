@@ -10,7 +10,7 @@ func_array=[]
 fanout_dict={}
 import gc
 import os
-version="0.2"
+version="0.22"
 def test_logics2():
     '''
     This function run testbench for OR,NOR,XOR,XNOR,AND,NAND
