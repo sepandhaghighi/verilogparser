@@ -274,6 +274,7 @@ def csv_time_writer(output_dict,input_dict,file):
         file.write(",")
         file.write(",".join(list(map(str,output_dict[out]))))
         file.write("\n")
+    file.write("\n")
 
 def csv_time_init(time_slot,file):
     '''
