@@ -54,6 +54,12 @@ Simple verilog parser and simulator in python
 - Deductive Simulation : `python -m verilogparser file.v input 1,1 deductive` or `python -m verilogparser file.v all deductive`
 - Delay Simulation : `python -m verilogparser file.v input 1,1 time slot`
 
+### Outputs
+
+- Delay analysis in `filename_time.csv`
+- Deductive simulation in `filename.ds`
+- Logic analysis in `filename.csv` and `filename.log`
+
 <div align="center">
 <a href="https://asciinema.org/a/JldWPCLkemWNpWSy7QgDxQKSK" target="_blank"><img src="https://asciinema.org/a/JldWPCLkemWNpWSy7QgDxQKSK.png" /></a>
 <p>Screen Record</p>
