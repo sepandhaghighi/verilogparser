@@ -55,7 +55,7 @@ Simple verilog parser and simulator in python
 - Delay Simulation : `python -m verilogparser file.v input 1,1 time slot`
 
 <div align="center">
-<a href="https://asciinema.org/a/144795" target="_blank"><img src="https://asciinema.org/a/144795.png" /></a>
+<a href="https://asciinema.org/a/JldWPCLkemWNpWSy7QgDxQKSK" target="_blank"><img src="https://asciinema.org/a/JldWPCLkemWNpWSy7QgDxQKSK.png" /></a>
 <p>Screen Record</p>
 </div>			
 
