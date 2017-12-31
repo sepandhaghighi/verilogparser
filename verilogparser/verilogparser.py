@@ -358,8 +358,6 @@ def get_result_time(output_dict,input_dict,time_slot):
         for item in func_array:
             input_data = list(map(mapFunc, item[1]))
             delay=item[4]
-            print(input_dict)
-            print(output_dict_temp)
             if delay<=i:
                 output_dict_temp[item[2]].append(item[0](list(map(lambda x: x[i-delay],input_data))))
             else:
