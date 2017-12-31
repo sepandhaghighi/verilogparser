@@ -12,7 +12,7 @@ input a,b;
 output e;
 
 
-nand #3 NAND2_1  (e, a, b);
+nand #4 NAND2_1  (e, a, b);
 
 
 endmodule

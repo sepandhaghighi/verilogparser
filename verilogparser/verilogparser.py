@@ -219,13 +219,14 @@ def csv_init(input_array,wire_array,output_array,file):
     '''
     input_keys = []
     input_keys.extend(input_array)
-    input_keys.extend(wire_array)
     input_keys.sort()
     output_keys = []
     output_keys.extend(output_array)
+    output_keys.extend(wire_array)
     output_keys.sort()
     for inp in input_keys:
         file.write(inp+",")
+    file.write(",,")
     for index,out in enumerate(output_keys):
         file.write(out)
         if index<len(output_keys):
@@ -245,6 +246,7 @@ def csv_writer(output_dict,input_dict,file):
     output_keys.sort()
     for inp in input_keys:
         file.write(str(input_dict[inp])+",")
+    file.write(",,")
     for index,out in enumerate(output_keys):
         file.write(str(output_dict[out]))
         if index<len(output_keys):
@@ -281,7 +283,7 @@ def csv_time_init(time_slot,file):
     :return: None
     '''
     file.write("Input,")
-    for i in range(time_slot+1):
+    for i in range(time_slot):
         file.write("T"+str(i))
         if i<time_slot+1:
             file.write(",")
@@ -356,13 +358,17 @@ def get_result_time(output_dict,input_dict,time_slot):
         for item in func_array:
             input_data = list(map(mapFunc, item[1]))
             delay=item[4]
-            if delay<=len(input_data[0]):
-                output_dict_temp[item[2]].append(item[0](list(map(lambda x: x[len(input_data)-delay],input_data))))
+            print(input_dict)
+            print(output_dict_temp)
+            if delay<=i:
+                output_dict_temp[item[2]].append(item[0](list(map(lambda x: x[i-delay],input_data))))
             else:
                 pointer=item[2]
                 output_dict_temp[pointer].append(output_dict_temp[item[2]][-1])
         for j in input_dict.keys():
             input_dict[j].append(input_dict[j][-1])
+    for i in output_dict_temp.keys():
+        output_dict_temp[i]=output_dict_temp[i][1:]
     return output_dict_temp
 
 
