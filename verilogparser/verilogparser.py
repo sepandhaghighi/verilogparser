@@ -10,7 +10,7 @@ func_array=[]
 fanout_dict={}
 import gc
 import os
-version="0.22"
+version="0.23"
 def test_logics2():
     '''
     This function run testbench for OR,NOR,XOR,XNOR,AND,NAND
@@ -267,7 +267,7 @@ def csv_time_writer(output_dict,input_dict,file):
     output_keys.sort()
     for inp in input_keys:
         file.write(str(inp)+",")
-        file.write(",".join(list(map(str,input_dict[inp]))))
+        file.write(",".join(list(map(str,input_dict[inp][:-1]))))
         file.write("\n")
     for out in output_keys:
         file.write(out)

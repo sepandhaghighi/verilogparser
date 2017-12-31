@@ -184,11 +184,11 @@ __   __  ___  _ __ (_)| |  ___    __ _  _ __    __ _  _ __  ___   ___  _ __
   \_/   \___||_|   |_||_| \___/  \__, || .__/  \__,_||_|   |___/ \___||_|
                                  |___/ |_|
 <BLANKLINE>
-         ___      ____   ____
-__   __ / _ \    |___ \ |___ \
-\ \ / /| | | |     __) |  __) |
- \ V / | |_| | _  / __/  / __/
-  \_/   \___/ (_)|_____||_____|
+         ___      ____   _____
+__   __ / _ \    |___ \ |___ /
+\ \ / /| | | |     __) |  |_ \
+ \ V / | |_| | _  / __/  ___) |
+  \_/   \___/ (_)|_____||____/
 <BLANKLINE>
 <BLANKLINE>
  ____           ____      _   _                _      _         _      _
@@ -198,6 +198,17 @@ __   __ / _ \    |___ \ |___ \
 |____/  \__, | |____/ (_)|_| |_| \__,_| \__, ||_| |_||_| \__, ||_| |_||_|
         |___/                           |___/            |___/
 <BLANKLINE>
+Help :
+<BLANKLINE>
+     - file.v all --> (test all cases)
+<BLANKLINE>
+     - file.v random test_number(optional) --> (test random cases)
+<BLANKLINE>
+     - file.v input test vector --> (test case Example : python -m verilogparser test.v input 1,1,1)
+<BLANKLINE>
+     - file.v detail --> (module details)
+     - file.v deductive --> (deductive analysis)
+     - file.v time timeslot --> (delay analysis Example : python -m verilogparser test.v input 1,1,1 time 12)
 Help :
 <BLANKLINE>
      - file.v all --> (test all cases)
